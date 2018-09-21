@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "818200238462",
+    "firebase_url": "https://electric-monitor.firebaseio.com",
+    "project_id": "electric-monitor",
+    "storage_bucket": "electric-monitor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818200238462:android:001468b7dfe80365",
+        "android_client_info": {
+          "package_name": "com.jnlbr.monitor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "818200238462-55b9i38a4ckehsq8ofs5qt0snm8je8mb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jnlbr.monitor",
+            "certificate_hash": "dbae404b13241a654aa302a8bfa246e6ede3265e"
+          }
+        },
+        {
+          "client_id": "818200238462-711iorh66u1u1stvuaug12ienvo5kq9i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2_YLQ4Kpu3jofGR5gIrFSFZMQ2aezJqI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "818200238462-711iorh66u1u1stvuaug12ienvo5kq9i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
