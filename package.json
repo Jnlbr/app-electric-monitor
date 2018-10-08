@@ -21,7 +21,8 @@
   "dependencies": {
     "expo": "^27.0.1",
     "react": "16.3.1",
-    "react-native": "~0.55.2"
+    "react-native": "~0.55.2",
+    "socket.io-client": "^2.1.1"
   },
   "author": "Jean Lambert <jeeaan1702@gmail.com>",
   "license": "MIT"
