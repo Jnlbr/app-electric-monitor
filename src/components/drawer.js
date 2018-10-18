@@ -7,23 +7,23 @@ import {
 } from 'react-native';
 import { DrawerItems, SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import styles from './Styles/drawer';
+import styles from './styles/drawer';
 
-const Drawer = () => (
+const Drawer = (props) => (
   <View style={styles.container}>
     <ScrollView>
       <SafeAreaView
         style={{flex:1}}
         forceInset={{ top: 'always', horizontal: 'never' }}
-      ><DrawerItems activeTintColor="white" inactiveTintColor="white" {...this.props} />
+      ><DrawerItems activeTintColor="white" inactiveTintColor="white" {...props} />
       </SafeAreaView>               
     </ScrollView>
     <View style={styles.footerContainer}>
-      {/* <TouchableOpacity
+      <TouchableOpacity
         style={styles.button}
         onPress={this.handleLogout}
       ><Icon name="logout" size={30} color="white" />
-      </TouchableOpacity> */}
+      </TouchableOpacity>
     </View>
   </View>
 );

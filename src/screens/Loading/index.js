@@ -1,1 +1,1 @@
-export {default as LoadingScreen} from './loading';
+export {default} from './loading';

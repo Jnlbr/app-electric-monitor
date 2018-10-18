@@ -1,12 +1,12 @@
 import { createSwitchNavigator } from 'react-navigation';
-// import AuthRoutes from './auth';
+import AuthRoutes from './auth';
 import UserRoutes from './user';
 import { LoadingScreen } from '../screens';
 
 export default createSwitchNavigator(
   {
     UserRoutes: UserRoutes,    
-    // AuthRoutes: AuthRoutes,
+    AuthRoutes: AuthRoutes,
     Loading: LoadingScreen,
   }, {
     headerMode: 'none',

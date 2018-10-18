@@ -1,2 +1,3 @@
-export { LoadingScreen } from './Loading';
-export { HomeScreen } from './Home';
+export {default as LoadingScreen} from './Loading';
+export {default as HomeScreen} from './Home';
+export {default as LogInScreen} from './LogIn';

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
+import styles from './styles/loading';
+import colors from '../../contants/colors';
 
 class Loading extends Component {
   constructor(props) {
@@ -11,17 +13,19 @@ class Loading extends Component {
   isAuth = async () => {    
     setTimeout(() => {
       console.log('TIMEOUT')
-      this.props.navigation.navigate('UserRoutes'); 
+      this.props.navigation.navigate('AuthRoutes'); 
     }, 5000)
   }
 
    render() {
 
     return (      
-      <ActivityIndicator 
-        size="large" 
-        color="#F04A58"
-      />
+      <View style={styles.container}>
+        <ActivityIndicator 
+          size="large" 
+          color={colors.secondary.main}
+        />
+      </View>
     )
   }
 }

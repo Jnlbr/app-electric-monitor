@@ -1,14 +1,14 @@
-import { createDrawerNavigator,createStackNavigator } from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation';
 import { Drawer } from '../../components';
 import {
   HomeScreen 
 } from '../../screens';
 
-export default createStackNavigator(
+export default createDrawerNavigator(
   {
     Home: HomeScreen,
   }, {
-    initialRouteName:'Home'
-    // contentComponent: Drawer
+    initialRouteName:'Home',
+    contentComponent: Drawer
   }
 )
