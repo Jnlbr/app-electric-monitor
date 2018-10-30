@@ -1,4 +1,4 @@
-import { API_URL } from './configs';
+import { API_URL } from './config';
 
 export default async ({ endpoint, method, data = null, headers = {}, formdata = false }) => {
   const url = API_URL + endpoint;

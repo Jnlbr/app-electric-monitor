@@ -19,7 +19,7 @@ class Home extends Component {
           Home
         </Text>
         <Button 
-          title="Holis"
+          title="Home"
           onPress={() => console.log('holiwis')}
         />
       </View>

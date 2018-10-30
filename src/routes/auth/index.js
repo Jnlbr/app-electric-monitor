@@ -1,6 +1,7 @@
 import { createStackNavigator } from 'react-navigation';
 import {
-  LogInScreen 
+  LogInScreen,
+  SignUpScreen
 } from '../../screens';
 import colors from '../../contants/colors';
 
@@ -10,6 +11,12 @@ export default createStackNavigator(
       screen: LogInScreen,
       navigationOptions: ({ navigation }) => ({
         title: 'Log In'
+      })
+    },
+    SignUp: {
+      screen: SignUpScreen,
+      navigationOptions: ({ navigation }) => ({
+        title: 'Sign Up'
       })
     }
   }, {

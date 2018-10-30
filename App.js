@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Routes from './src/routes';
-// import colors from './src/contants/colors';
+import colors from './src/contants/colors';
 
 export default class App extends React.Component {
   

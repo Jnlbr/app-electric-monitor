@@ -73,7 +73,7 @@ class LogIn extends Component {
         <View style={styles.optionsContainer}>
           <Text
             style={styles.text}
-            onPress={() => navigation.push('SignUp')}
+            onPress={() => this.props.navigation.push('SignUp')}
           > SIGN UP!
           </Text>
         </View>
