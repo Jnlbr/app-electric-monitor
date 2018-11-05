@@ -8,7 +8,7 @@ function createReducer(initialState, actionHandlers) {
   }
 }
 
-function createFetchPattern(_actionName, cb, _actionHandlers = {}) {
+function createFetchPattern(_actionName, cb, token = false, _actionHandlers = {}) {
   const actionName = _actionName.toUpperCase();
   const actionRequest = actionName + '_REQUEST';
   const actionFailure = actionName + '_FAIULURE';
@@ -20,7 +20,7 @@ function createFetchPattern(_actionName, cb, _actionHandlers = {}) {
     errorMessage: '',
   }
   const actionHandlers = {
-    [actionRequest]: (state,action) => ({...state, fetching: true, error: false, errorMessage: null }),
+    [actionRequest]: (state,action) => ({...state, fetching: true, error: false, errorMessage: '' }),
     [actionFailure]: (state,action) => ({...state, fetching: false, error: true, errorMessage: action.error}),
     [actionSuccess]: (state,action) => ({...state, fetching: false, data: action.data}),
     ..._actionHandlers,
@@ -28,7 +28,7 @@ function createFetchPattern(_actionName, cb, _actionHandlers = {}) {
   const action = (form = null) => {
     return async (dispatch, getState) => {
       dispatch({type: actionRequest});
-      const { auth: { token }} = getState();
+      const { auth: { user: { token } }} = getState();
       if(token) {
         try {
           const data = form ? await cb(form, token) : await cb(token);
@@ -59,9 +59,10 @@ function createFetchPattern(_actionName, cb, _actionHandlers = {}) {
     }
   }
 
+  const reducer = createReducer(initialState, actionHandlers)
   return {
-    reducer: createReducer(initialState, actionHandlers),
-    action: action,
+    reducer,
+    action
   }
 }
 

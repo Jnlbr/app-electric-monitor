@@ -4,7 +4,6 @@ import fetchApi from '../../utils/fetchApi';
 export default async () => {
   try {
     const token = await getItem('token');
-    console.log(token)
     if(token) {
       const options = {
         method: 'get',

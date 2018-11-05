@@ -13,3 +13,5 @@ export default createSwitchNavigator(
     initialRouteName: 'Loading',
   }
 );
+
+// export default AuthRoutes

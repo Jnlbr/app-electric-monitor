@@ -1,37 +1,48 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { 
 	KeyboardAvoidingView,
 	TouchableOpacity,
 	View,
 	Text,
-	ProgressBarAndroid,
-	ImageBackground
+	ProgressBarAndroid
 } from 'react-native';
 import styles from './styles/logIn';
 import { Input } from '../../components';
 import emptyFields from '../../utils/emptyFields';
 import MessageHandler from '../../utils/messageHandler';
-import PropTypes from 'prop-types';
-
 import usernameImg from '../../assets/icons/user-input.png';
 import passwordImg from '../../assets/icons/password-input.png';
-// import logoImg from '../../assets/images/Logo.png';
 
 class LogIn extends Component {
-   
-	state = {
-		username: '',
-    password: '',
-    messageHandler: new MessageHandler()
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: 'jnlbr',
+      password: '1234',
+    }
+    this.messageHandler = new MessageHandler();
+  }
   handleTextChange = (input) => (value) => this.setState({[input]: value});
 
   componentDidUpdate(prevProps) {
-    
-  }
+    const user = this.props.user
+    if (user && !user) {
+      this.props.setAuth(user);
+      if(user.hasLicense) {
+        this.props.navigation.navigate('UserRoutes');
+      } else {
+        this.props.navigation.navigate('License');
+      }
+    }
+    if(this.props.error && !prevProps.error) {
+      this.messageHandler.errorMessage(this.props.errorMessage);
+    }
+}
 
   render() {
     const disabled = emptyFields(this.state);
+    const { fetching } = this.props;
 
     return (
       <KeyboardAvoidingView style={styles.root} behavior="padding" enabled>
@@ -59,35 +70,32 @@ class LogIn extends Component {
             <TouchableOpacity
               activeOpacity={0.1}
               style={[styles.button, disabled && {opacity: 0.5}]}
-              onPress={this.handleLogin}
+              onPress={() => this.props.logIn(this.state)}
               disabled={disabled}
             >
-              {/* { (!fetching) ? ( */}
+              { (!fetching) ? ( 
                   <Text style={styles.buttonText}> LOG IN! </Text>
-              {/* ) : (
+               ) : (
                   <ProgressBarAndroid styleAttr="Small" color="white"/>
-              )} */}
+              )}
             </TouchableOpacity>        
           </View>
         </View>
         <View style={styles.optionsContainer}>
-          <Text
-            style={styles.text}
+          <TouchableOpacity
+            activeOpacity={0.1}
+            style={{}}
             onPress={() => this.props.navigation.push('SignUp')}
-          > SIGN UP!
-          </Text>
+          >
+            <Text
+              style={styles.text}              
+            > SIGN UP!
+            </Text>
+          </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     );
   }
-}
-
-LogIn.propTypes = {
-	// fetching: PropTypes.bool,
-	// isLoggedIn: PropTypes.bool,
-	// login: PropTypes.func,
-	// error: PropTypes.bool,
-	// errorMessage: PropTypes.string,
 }
 
 export default LogIn
