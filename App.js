@@ -1,15 +1,26 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Routes from './src/routes';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import reducer from './src/store';
 import colors from './src/contants/colors';
+
+const store = createStore(
+  reducer,
+  applyMiddleware(thunk)
+);
 
 export default class App extends React.Component {
   
   render() {
     return (
-      <View style={styles.container}>
-        <Routes />
-      </View>
+      <Provider store={store}>
+        <View style={styles.container}>
+          <Routes />
+        </View>
+      </Provider>
     );
   }
 }

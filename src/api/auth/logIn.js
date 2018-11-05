@@ -1,4 +1,4 @@
-import fetchApi from '../../../utils/fetchApi';
+import fetchApi from '../../utils/fetchApi';
 
 /**
  * @param username
@@ -7,9 +7,6 @@ import fetchApi from '../../../utils/fetchApi';
 export default async (form) => {
   const options = {
     method: 'post',
-    headers: {
-      "Content-Type":"application/json"
-    },
     credentials: 'include',
     body: form,
     endpoint: '/auth/login'
@@ -22,6 +19,8 @@ export default async (form) => {
       return null;
     }
   } catch(err) {
+    console.log('Api: LogIn error: ');
+    console.log(err);
     throw err;
   }
 }

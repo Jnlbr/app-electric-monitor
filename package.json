@@ -27,6 +27,7 @@
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-saga": "^0.16.2",
+    "redux-thunk": "^2.3.0",
     "socket.io-client": "^2.1.1"
   },
   "author": "Jean Lambert <jeeaan1702@gmail.com>",

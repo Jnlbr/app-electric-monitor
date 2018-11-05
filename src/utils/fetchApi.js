@@ -1,8 +1,8 @@
 import { API_URL } from './config';
 
-export default async ({ endpoint, method, data = null, headers = {}, formdata = false }) => {
+export default async ({ endpoint, method, body = null, headers = {}, formdata = false }) => {
   const url = API_URL + endpoint;
-  const _options = options(method,headers,data,formdata);
+  const _options = options(method,headers,body,formdata);
   try {
     const res = await fetch(url,_options);
     const data = await res.json();
@@ -19,13 +19,14 @@ export default async ({ endpoint, method, data = null, headers = {}, formdata = 
   }
 }
 
-const options = (method,headers,data,fd) => {
+const options = (method,headers,body,fd) => {
   const _options = {
     method: method,
     credentials: 'include',
     headers: {
+      'Content-Type':'application/json',
       'Accept': 'application/json',
-      'Content-Type': fd? 'multipart/form-data' : 'application/json',
+      // fd? 'multipart/form-data' : 
       ...headers,
     }
   }
@@ -39,21 +40,21 @@ const options = (method,headers,data,fd) => {
     case 'update':
       return {
         ..._options,
-        body: processBody(data,fd)
+        body: processBody(body,fd)
       }
     default:
       break;
   }
 }
 
-const processBody = (data,fd) => {
+const processBody = (body,fd) => {
   if(fd) {
-    let body = new FormData();
-    let keys = Object.keys(data);
-    keys.forEach(key => body.append(key, data[key]));
-    return body
+    let _body = new FormData();
+    let keys = Object.keys(body);
+    keys.forEach(key => body.append(key, body[key]));
+    return _body
   } else {
-    let body = JSON.stringify(data);
-    return body
+    let _body = JSON.stringify(body);
+    return _body
   }
 }
