@@ -8,9 +8,7 @@ const mapDispatchToProps = dispatch => ({
   logIn: form => {
     dispatch(logIn(form));
   },
-  setAuth: (user) => {
-    let token = user.token;
-    delete user['token'];
+  setAuth: ({ token, ...user }) => {
     dispatch(setUser(user));
     dispatch(setToken(token));
   }

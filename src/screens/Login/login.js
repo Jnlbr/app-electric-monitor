@@ -27,7 +27,7 @@ class LogIn extends Component {
 
   componentDidUpdate(prevProps) {
     const user = this.props.user
-    if (user && !user) {
+    if (user && !prevProps.user) {
       this.props.setAuth(user);
       if(user.hasLicense) {
         this.props.navigation.navigate('UserRoutes');
@@ -38,11 +38,12 @@ class LogIn extends Component {
     if(this.props.error && !prevProps.error) {
       this.messageHandler.errorMessage(this.props.errorMessage);
     }
-}
+  }
 
   render() {
     const disabled = emptyFields(this.state);
     const { fetching } = this.props;
+    console.log(this.props.user)
 
     return (
       <KeyboardAvoidingView style={styles.root} behavior="padding" enabled>
@@ -70,7 +71,7 @@ class LogIn extends Component {
             <TouchableOpacity
               activeOpacity={0.1}
               style={[styles.button, disabled && {opacity: 0.5}]}
-              onPress={() => this.props.logIn(this.state)}
+              onPress={() => this.props.logIn({form:this.state, token:false})}
               disabled={disabled}
             >
               { (!fetching) ? ( 

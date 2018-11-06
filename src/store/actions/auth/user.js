@@ -1,11 +1,21 @@
 import userConst from '../../const/user';
 import { createReducer } from '../../../utils/reduxHelpers';
+import { setItem } from '../../../utils/storage';
 
 // Actions
 export function setToken(token) {
-  return {
-    type: userConst.SET_TOKEN,
-    token
+  return async dispatch => {
+    try {
+      await setItem('token', token);
+    } catch(err) {
+      console.log('setToken action error:');
+      console.log(err);
+    } finally {
+      dispatch({
+        type: userConst.SET_TOKEN,
+        token
+      })
+    }
   }
 }
 
@@ -22,6 +32,12 @@ const initialState = {
   token: null
 }
 export const userReducer = createReducer(initialState, {
-  [userConst.SET_TOKEN]: (state,action) => ({ ...state, token: action.token }),
-  [userConst.SET_USER]: (state,action) => ({ ...state, data: action.data })
+  [userConst.SET_TOKEN]: (state,action) => {
+    console.log(action)
+    return { ...state, token: action.token }
+  },
+  [userConst.SET_USER]: (state,action) => {
+    console.log(action)
+    return { ...state, data: action.data }
+  }
 });

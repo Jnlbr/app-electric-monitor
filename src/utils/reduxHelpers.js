@@ -25,21 +25,29 @@ function createFetchPattern(_actionName, cb, token = false, _actionHandlers = {}
     [actionSuccess]: (state,action) => ({...state, fetching: false, data: action.data}),
     ..._actionHandlers,
   }
-  const action = (form = null) => {
+  const action = ({form = null, token = true} = {}) => {
     return async (dispatch, getState) => {
+      console.log(getState())
       dispatch({type: actionRequest});
-      const { auth: { user: { token } }} = getState();
       if(token) {
-        try {
-          const data = form ? await cb(form, token) : await cb(token);
-          dispatch({
-            type: actionSuccess,
-            data: data
-          });
-        } catch (err) {
+        const _token = getState().auth.user.token;
+        if(_token) {
+          try {
+            const data = form ? await cb(form, _token) : await cb(_token);
+            dispatch({
+              type: actionSuccess,
+              data: data
+            });
+          } catch (err) {
+            dispatch({
+              type: actionFailure,
+              error: err
+            });
+          }
+        } else {
           dispatch({
             type: actionFailure,
-            error: err
+            error: 'Token was not provided'
           });
         }
       } else {

@@ -1,30 +1,70 @@
 import React, { Component } from 'react';
 import {
   View,
-  Text,
-  Button
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
+import {
+  Card
+} from 'react-native-elements';
+import styles from './styles/home';
+
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
 
-    console.log('Home')
-  }
+  navigate = (screen) => () => this.props.navigation.navigate(screen);
   render() {
 
     return (
-      <View style={{alignContent: 'center', justifyContent: 'center'}}>
-        <Text>
-          Home
-        </Text>
-        <Button 
-          title="Home"
-          onPress={() => console.log('holiwis')}
+      <ScrollView style={styles.container}>
+        <MenuCard
+          onPress={this.navigate('Monitor')}
+          title="Monitor"
+          image={require("../../assets/menu/research.png")}
         />
-      </View>
+        <MenuCard
+          onPress={this.navigate('DeviceManager')}
+          title="Devices"
+          image={require("../../assets/menu/devices.png")}
+        />
+        <MenuCard
+          onPress={() => console.log('holas3')}
+          title="Preference"
+          image={require("../../assets/menu/feedback.png")}
+        />
+        <MenuCard
+          onPress={() => console.log('holas4')}
+          title="Configuration"
+          image={require("../../assets/menu/settings.png")}
+        />
+      </ScrollView>
     )
   }
 }
+
+const MenuCard = ({ title, image, onPress }) => (
+  <TouchableOpacity 
+    onPress={onPress}
+    style={{
+      marginTop: 20,
+      marginLeft: 40,
+      marginRight: 40,
+      backgroundColor: 'blue'
+    }}
+  >
+    <Card
+      containerStyle={{
+        margin: 0,
+      }}
+      imageProps={{
+        resizeMode: 'contain'
+      }}
+      title={title}
+      image={image}
+    >
+
+    </Card>
+  </TouchableOpacity>
+)
 
 export default Home;

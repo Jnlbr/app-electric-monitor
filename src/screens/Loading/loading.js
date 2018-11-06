@@ -18,7 +18,7 @@ class Loading extends Component {
       if(data) {
         console.log('LOADING SCREEN: isAuth - User routes');
         console.log('DATA: token?');
-        console.log(data)
+        this.props.setAuth(data);
         this.props.navigation.navigate('UserRoutes');
       } else {
         console.log('LOADING SCREEN: isAuth - Auth routes');

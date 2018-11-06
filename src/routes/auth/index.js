@@ -1,7 +1,8 @@
 import { createStackNavigator } from 'react-navigation';
 import {
   LogInScreen,
-  SignUpScreen
+  SignUpScreen,
+  LicenseScreen
 } from '../../screens';
 import colors from '../../contants/colors';
 
@@ -17,6 +18,12 @@ export default createStackNavigator(
       screen: SignUpScreen,
       navigationOptions: ({ navigation }) => ({
         title: 'Sign Up'
+      })
+    },
+    LicenseScreen: {
+      screen: SignUpScreen,
+      navigationOptions: ({ navigation }) => ({
+        title: 'License register'
       })
     }
   }, {

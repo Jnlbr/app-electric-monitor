@@ -8,7 +8,7 @@ export default async ({ endpoint, method, body = null, headers = {}, formdata = 
     const data = await res.json();
     if(data) {
       const { status, body } = data;
-      if (status >= 200 && status < 300)
+      if (status >= 200 && status < 400)
         return body
       else
         throw body
@@ -37,7 +37,7 @@ const options = (method,headers,body,fd) => {
       }
     case 'post':
     case 'delete':
-    case 'update':
+    case 'put':
       return {
         ..._options,
         body: processBody(body,fd)
