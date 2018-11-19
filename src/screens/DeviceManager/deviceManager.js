@@ -12,9 +12,6 @@ import updateStatus from "../../api/device/updateStatus";
 class DeviceManager extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      devices: [],
-    }
     this.messageHandler = new MessageHandler();
   }
   handleChange = async (id,status) => {
@@ -34,11 +31,9 @@ class DeviceManager extends Component {
    this.props.getAll();
   }
   componentDidUpdate(prevProps) {
-    const devices = this.props.devices;
-    if (devices && !prevProps.devices) {
-      this.setState({
-        devices: devices
-      });
+    const data = this.props.data;
+    if (data && !prevProps.data) {
+      this.props.setDevices(data);
     }
     if(this.props.error && !prevProps.error) {
       this.messageHandler.errorMessage(this.props.errorMessage);
@@ -46,7 +41,6 @@ class DeviceManager extends Component {
   }
 
   render() {
-    const { devices } = this.state; 
     return (
       <View>
         {/* <Header
@@ -56,7 +50,7 @@ class DeviceManager extends Component {
         /> */}
         <List containerStyle={{marginBottom: 20}}>
           {
-            devices.map((device) => (
+            this.props.devices.map((device) => (
               <ListItem
                 onPress={() => this.props.navigation.navigate('Device', device)}
                 rightIcon={

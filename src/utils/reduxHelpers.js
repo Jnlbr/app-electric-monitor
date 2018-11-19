@@ -27,7 +27,6 @@ function createFetchPattern(_actionName, cb, token = false, _actionHandlers = {}
   }
   const action = ({form = null, token = true} = {}) => {
     return async (dispatch, getState) => {
-      console.log(getState())
       dispatch({type: actionRequest});
       if(token) {
         const _token = getState().auth.user.token;

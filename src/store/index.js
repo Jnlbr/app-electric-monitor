@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import { userReducer } from './actions/auth/user';
 import { logInReducer } from './actions/auth/logIn';
-import { getAllReducer, updateStatusReducer } from './actions/device';
+import { getAllReducer } from './actions/device/getAll';
+import { devicesReducer } from "./actions/device/devices";
 
 const deviceReducer = combineReducers({
-  getAll: getAllReducer
+  getAll: getAllReducer,
+  devices: devicesReducer
 })
 const authReducer = combineReducers({
   user: userReducer,

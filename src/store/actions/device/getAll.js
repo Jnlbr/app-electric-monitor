@@ -1,7 +1,6 @@
-import { createFetchPattern } from '../../utils/reduxHelpers';
-import getAllApi from '../../api/device/getAll';
+import { createFetchPattern } from '../../../utils/reduxHelpers';
+import getAllApi from '../../../api/device/getAll';
 
-// const { reducer, action} = 
 const getAllPattern = createFetchPattern(
   'GET_ALL',
   getAllApi,
