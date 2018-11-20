@@ -15,13 +15,14 @@ import emptyFields from '../../utils/emptyFields';
 import { Input } from '../../components';
 import styles from './styles/signUp';
 
-class SignUp extends React.Component {
+class SignUp extends Component {
 	state = {
 		username: '',
 		name: '',
 		password: '',
 		verification: '',
 		email: '',
+		code: ''
 	}
 
 	handleTextChange = (input) => (value) => this.setState({[input]: value});
@@ -78,6 +79,15 @@ class SignUp extends React.Component {
 						placeholderTextColor="white"
 						onChangeText={this.handleTextChange('email')}
 						value={this.state.email}
+						containerStyle={styles.input}
+					/>
+					<Input
+						source={passwordImg}
+						textContentType="name"
+						placeholder="Code"
+						placeholderTextColor="white"
+						onChangeText={this.handleTextChange('code')}
+						value={this.state.code}
 						containerStyle={styles.input}
 					/>
 					<View style={styles.div}>

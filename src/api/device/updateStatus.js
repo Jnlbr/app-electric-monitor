@@ -13,7 +13,7 @@ export default async (form,token) => {
     headers: {
       'x-access-token': token
     },
-    endpoint: '/device/update/status'
+    endpoint: '/hardware/update/status'
   }
   try {
     const data = await fetchApi(options);
@@ -24,7 +24,7 @@ export default async (form,token) => {
       return null;
     }
   } catch(err) {
-    console.log('Api: updateStatus error: ');
+    console.log('Api: update status error: ');
     console.log(err);
     throw err;
   }

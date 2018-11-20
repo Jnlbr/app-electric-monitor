@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Routes from './src/routes';
 import { createStore, applyMiddleware } from 'redux';
@@ -12,7 +12,7 @@ const store = createStore(
   applyMiddleware(thunk)
 );
 
-export default class App extends React.Component {
+class App extends Component {
   
   render() {
     return (
@@ -31,3 +31,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#e1e2e1',
   },
 });
+
+export default App;

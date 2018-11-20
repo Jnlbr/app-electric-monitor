@@ -1,11 +1,14 @@
 import DeviceManager from './deviceManager';
 import { connect } from 'react-redux';
 import { getAll } from '../../store/actions/device/getAll';
-import { setDevices } from "../../store/actions/device/devices";
+import { setDevices, changeState } from "../../store/actions/device/devices";
 
 const mapDispatchToProps = dispatch => ({
   getAll: () => {
     dispatch(getAll());
+  },
+  changeState: id => {
+    dispatch(changeState(id))
   },
   setDevices: devices => {
     dispatch(setDevices(devices))

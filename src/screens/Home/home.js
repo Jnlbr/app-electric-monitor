@@ -27,7 +27,7 @@ class Home extends Component {
           title="Devices"
           image={require("../../assets/menu/devices.png")}
         />
-        <MenuCard
+        {/* <MenuCard
           onPress={() => console.log('holas3')}
           title="Preference"
           image={require("../../assets/menu/feedback.png")}
@@ -36,7 +36,7 @@ class Home extends Component {
           onPress={() => console.log('holas4')}
           title="Configuration"
           image={require("../../assets/menu/settings.png")}
-        />
+        /> */}
       </ScrollView>
     )
   }
