@@ -6,8 +6,7 @@ const COMPONENT_WIDTH = DEVICE_WIDTH*0.85;
 export default StyleSheet.create({
   root: {
     // width: COMPONENT_WIDTH,
-    marginTop: 40,
+    marginTop: 20,
     justifyContent: 'center',
-
   }
 });

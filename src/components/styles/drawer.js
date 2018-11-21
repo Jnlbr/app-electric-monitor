@@ -1,12 +1,13 @@
 import {
   StyleSheet,
 } from 'react-native';
+import colors from '../../contants/colors';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: '#F04A58'
+    backgroundColor: colors.primary.light
   },
   footerContainer: {
     padding: 20,

@@ -1,20 +1,33 @@
 import React, { Component } from 'react';
 import { 
-  View,
-  Text,
+  View
 } from 'react-native';
 import MessageHandler from '../../utils/messageHandler';
-import { List, ListItem, Header } from 'react-native-elements';
+import { List, ListItem } from 'react-native-elements';
 import { ToggleSwitch } from '../../components';
 import updateStatus from "../../api/device/updateStatus";
 import styles from "./styles/deviceManager";
+import colors from '../../contants/colors';
 
 class DeviceManager extends Component {
+  
+  static navigationOptions = {
+    title: 'Device Manager',
+    headerStyle: {
+      backgroundColor: colors.primary.main,
+    },
+    headerTintColor: 'white',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  };
+
   constructor(props) {
     super(props);
     this.messageHandler = new MessageHandler();
     this.state = {
       devices: [],
+      token: '',
     }
   }
   handleChange = async (id,status) => {
@@ -28,6 +41,9 @@ class DeviceManager extends Component {
 
   componentDidMount() {
    this.props.getAll();
+   this.setState({
+     token: this.props.token
+   })
   }
   componentDidUpdate(prevProps) {
     const data = this.props.data;
@@ -45,7 +61,7 @@ class DeviceManager extends Component {
         <List containerStyle={{margin: 20}}>
           {this.props.devices.map(device => (
             <ListItem
-              onPress={() => this.props.navigation.navigate('Device', device)}
+              onPress={() => { console.log(device); this.props.navigation.push('Device', {device})}}
               rightIcon={
                 <ToggleSwitch
                   isOn={device.status}

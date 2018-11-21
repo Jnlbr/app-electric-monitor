@@ -29,7 +29,9 @@
     "redux": "^4.0.0",
     "redux-saga": "^0.16.2",
     "redux-thunk": "^2.3.0",
-    "socket.io-client": "^2.1.1"
+    "socket.io-client": "^2.1.1",
+    "d3-shape": "1.2.0",
+    "react-native-svg-charts": "2.1.0"
   },
   "author": "Jean Lambert <jeeaan1702@gmail.com>",
   "license": "MIT"
