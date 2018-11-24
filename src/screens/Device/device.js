@@ -89,7 +89,7 @@ class Device extends Component {
     }
     this.messageHandler = new MessageHandler();
     this.socket = SocketIOClient.connect(API_URL + '/user');
-    this.socket.on('params:' + this.state.device.id, this.onParams);
+    
   }
 
   setModalVisible(visible) {
@@ -99,15 +99,22 @@ class Device extends Component {
   }
 
   onParams(data) {
-    const params = data.params;
     this.setState({
-      amps: params.amps,
-      watts: params.watts
-    })
+      amps: data.amps,
+      watts: data.watts
+    });
+    console.log(data)
   }
 
   componentDidMount() {
     // Fetch de la data
+    // this.socket.on('params:' + this.state.device.id, this.onParams);
+    this.socket.on('params:' + this.state.device.id, (data) => {
+      this.setState({
+        amps: data.amps,
+        watts: data.watts
+      });
+    });
   }
 
   render() {

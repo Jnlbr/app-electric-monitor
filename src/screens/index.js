@@ -1,6 +1,6 @@
 export {default as LoadingScreen} from './Loading';
 export {default as HomeScreen} from './Home';
-export {default as LogInScreen} from './LogIn';
+export {default as LogInScreen} from './Login';
 export {default as SignUpScreen} from './SignUp';
 export {default as LicenseScreen} from './License';
 export {default as MonitorScreen} from './Monitor';

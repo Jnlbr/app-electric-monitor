@@ -7,7 +7,7 @@ import {
 	Text,
 	ProgressBarAndroid
 } from 'react-native';
-import styles from './styles/logIn';
+import styles from './styles/login';
 import { Input } from '../../components';
 import emptyFields from '../../utils/emptyFields';
 import MessageHandler from '../../utils/messageHandler';
