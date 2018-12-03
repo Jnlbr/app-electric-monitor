@@ -33,11 +33,9 @@ const initialState = {
 }
 export const userReducer = createReducer(initialState, {
   [userConst.SET_TOKEN]: (state,action) => {
-    console.log(action)
     return { ...state, token: action.token }
   },
   [userConst.SET_USER]: (state,action) => {
-    console.log(action)
     return { ...state, data: action.data }
   }
 });

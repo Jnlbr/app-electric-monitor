@@ -1,9 +1,22 @@
 import { combineReducers } from 'redux';
+// Auth reducers
 import { userReducer } from './actions/auth/user';
 import { logInReducer } from './actions/auth/logIn';
+// Device reducers 
 import { getAllReducer } from './actions/device/getAll';
 import { devicesReducer } from "./actions/device/devices";
+// Params reducers
+import { 
+  getDeviceMonthReducer,
+  getAllMonthReducer
+} from "./actions/params/deviceFetchReducers";
+import { deviceParamsReducer } from "./actions/params/deviceParams";
 
+const paramsReducer = combineReducers({
+  getDeviceMonth: getDeviceMonthReducer,
+  getAllMonth: getAllMonthReducer,
+  params: deviceParamsReducer, 
+})
 const deviceReducer = combineReducers({
   getAll: getAllReducer,
   devices: devicesReducer
@@ -13,20 +26,19 @@ const authReducer = combineReducers({
   logIn: logInReducer
 })
 
+// MAIN REDUCER
 const appReducer = combineReducers({
   auth: authReducer,
-  device: deviceReducer
+  device: deviceReducer,
+  params: paramsReducer
 });
 
-// const rootReducer = (state, action) => {
-//   if(action.type === LOGOUT_SUCCES) {
-//     state = undefined;
-//   }
-//   if(action.type === LOGIN_SUCCESS) {
-//     state.comments = undefined;
-//   }
+const rootReducer = (state, action) => {
+  if(action.type === 'LOG_OUT') {
+    state = undefined;
+  }
 
-//   return appReducer(state,action)
-// }
+  return appReducer(state,action)
+}
 
-export default appReducer;
+export default rootReducer;

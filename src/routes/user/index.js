@@ -9,8 +9,12 @@ import {
 
 const deviceRouter = createStackNavigator(
   {
-    DeviceManager: DeviceManagerScreen,
-    Device: DeviceScreen,
+    DeviceManager: {
+      screen: DeviceManagerScreen,
+    },
+    Device: {
+      screen: DeviceScreen,
+    },
   }, {
     initialRouteName: 'DeviceManager',    
   }

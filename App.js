@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import reducer from './src/store';
 import colors from './src/contants/colors';
+import Notification from './notification';
 
 const store = createStore(
   reducer,
@@ -18,6 +19,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <View style={styles.container}>
+          <Notification />
           <Routes />
         </View>
       </Provider>

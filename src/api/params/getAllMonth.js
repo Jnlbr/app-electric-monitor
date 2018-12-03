@@ -1,17 +1,13 @@
 import fetchApi from '../../utils/fetchApi';
 
-/**
- * @param token
- */
-export default async (form, token) => {
+export default async (token) => {
   const options = {
-    method: 'put',
-    headers: {
-      "x-access-token": token,
-    },
+    method: 'get',
     credentials: 'include',
-    body: form,
-    endpoint: '/register/token'
+    headers: {
+      'x-access-token': token
+    },
+    endpoint: '/hardware/params/getAll/month'
   }
   try {
     const data = await fetchApi(options);
@@ -21,6 +17,8 @@ export default async (form, token) => {
       return null;
     }
   } catch(err) {
+    console.log('Api: getMonth error: ');
+    console.log(err);
     throw err;
   }
 }

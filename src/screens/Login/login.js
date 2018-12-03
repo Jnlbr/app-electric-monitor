@@ -7,7 +7,7 @@ import {
 	Text,
 	ProgressBarAndroid
 } from 'react-native';
-import styles from './styles/login';
+import styles from './styles/logIn';
 import { Input } from '../../components';
 import emptyFields from '../../utils/emptyFields';
 import MessageHandler from '../../utils/messageHandler';
@@ -28,12 +28,9 @@ class LogIn extends Component {
   componentDidUpdate(prevProps) {
     const user = this.props.user
     if (user && !prevProps.user) {
+      console.log('LOGIN DID UPDATE AND USER')
       this.props.setAuth(user);
-      if(user.hasLicense) {
-        this.props.navigation.navigate('UserRoutes');
-      } else {
-        this.props.navigation.navigate('License');
-      }
+      this.props.navigation.navigate('UserRoutes');
     }
     if(this.props.error && !prevProps.error) {
       this.messageHandler.errorMessage(this.props.errorMessage);
@@ -43,7 +40,6 @@ class LogIn extends Component {
   render() {
     const disabled = emptyFields(this.state);
     const { fetching } = this.props;
-    console.log(this.props.user)
 
     return (
       <KeyboardAvoidingView style={styles.root} behavior="padding" enabled>

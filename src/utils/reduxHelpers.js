@@ -1,3 +1,8 @@
+/**
+ * 
+ * @param {*} initialState 
+ * @param {*} actionHandlers 
+ */
 function createReducer(initialState, actionHandlers) {
   return function reducer(state = initialState, action) {
     if (actionHandlers.hasOwnProperty(action.type)) {
@@ -8,7 +13,13 @@ function createReducer(initialState, actionHandlers) {
   }
 }
 
-function createFetchPattern(_actionName, cb, token = false, _actionHandlers = {}) {
+/**
+ * 
+ * @param {*} _actionName 
+ * @param {*} cb 
+ * @param {*} _actionHandlers 
+ */
+function createFetchPattern(_actionName, cb, _actionHandlers = {}) {
   const actionName = _actionName.toUpperCase();
   const actionRequest = actionName + '_REQUEST';
   const actionFailure = actionName + '_FAIULURE';
@@ -25,6 +36,11 @@ function createFetchPattern(_actionName, cb, token = false, _actionHandlers = {}
     [actionSuccess]: (state,action) => ({...state, fetching: false, data: action.data}),
     ..._actionHandlers,
   }
+
+  /**
+   * 
+   * @param {*} param0 
+   */
   const action = ({form = null, token = true} = {}) => {
     return async (dispatch, getState) => {
       dispatch({type: actionRequest});

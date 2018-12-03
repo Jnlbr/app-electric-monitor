@@ -8,7 +8,9 @@ import {
   Card
 } from 'react-native-elements';
 import styles from './styles/home';
-
+import { Permissions, Notifications } from 'expo';
+import registerToken from "../../api/register/token";
+import { connect } from 'react-redux';
 
 class Home extends Component {
 
@@ -27,16 +29,6 @@ class Home extends Component {
           title="Devices"
           image={require("../../assets/menu/devices.png")}
         />
-        {/* <MenuCard
-          onPress={() => console.log('holas3')}
-          title="Preference"
-          image={require("../../assets/menu/feedback.png")}
-        />
-        <MenuCard
-          onPress={() => console.log('holas4')}
-          title="Configuration"
-          image={require("../../assets/menu/settings.png")}
-        /> */}
       </ScrollView>
     )
   }
@@ -66,5 +58,4 @@ const MenuCard = ({ title, image, onPress }) => (
     </Card>
   </TouchableOpacity>
 )
-
 export default Home;
