@@ -45,7 +45,7 @@ function createFetchPattern(_actionName, cb, _actionHandlers = {}) {
     return async (dispatch, getState) => {
       dispatch({type: actionRequest});
       if(token) {
-        const _token = getState().auth.user.token;
+        const _token = getState().auth.logIn.token;
         if(_token) {
           try {
             const data = form ? await cb(form, _token) : await cb(_token);
@@ -62,7 +62,7 @@ function createFetchPattern(_actionName, cb, _actionHandlers = {}) {
         } else {
           dispatch({
             type: actionFailure,
-            error: 'Token was not provided'
+            error: 'Did not found token in the store'
           });
         }
       } else {

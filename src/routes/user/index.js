@@ -5,28 +5,40 @@ import {
   MonitorScreen,
   DeviceManagerScreen,
   DeviceScreen,
+  ConfigurationScreen,
+  AddDeviceScreen
 } from '../../screens';
 
-const deviceRouter = createStackNavigator(
-  {
+const Stack = createStackNavigator(
+{
     DeviceManager: {
       screen: DeviceManagerScreen,
+    },
+    AddDevice: {
+      screen: AddDeviceScreen,
+    },
+    Configuration: {
+      screen: ConfigurationScreen,
     },
     Device: {
       screen: DeviceScreen,
     },
+    Home: {
+      screen: HomeScreen,
+    },
+    Monitor: {
+      screen: MonitorScreen,
+    }
   }, {
-    initialRouteName: 'DeviceManager',    
+    initialRouteName: 'Home',
   }
 )
 
 export default createDrawerNavigator(
   {
-    Home: HomeScreen,
-    Monitor: MonitorScreen,
-    DeviceManager: deviceRouter
+    Stack: Stack,
   }, {
-    initialRouteName:'Home',
+    initialRouteName:'Stack',
     contentComponent: Drawer
   }
 )

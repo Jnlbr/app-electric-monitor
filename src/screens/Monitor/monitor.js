@@ -15,19 +15,27 @@ import monthLabel from "../../utils/monthLabel";
 import PureChart from 'react-native-pure-chart';
 import MessageHandler from '../../utils/messageHandler';
 import styles from './styles/monitor';
-import getAllParams from "../../api/params/getAllParams";
 
 class Monitor extends Component {
+
+  static navigationOptions = {
+    title: 'Monitor',
+    headerStyle: {
+      backgroundColor: colors.primary.main,
+    },
+    headerTintColor: 'white',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  };
 
   constructor(props) {
     super(props);
 
     this.state = {
       actual: null,
-      fetching: true,
-      historial: [],
       current: [],
-      power: [],
+      power: []
     }
     this.messageHandler = new MessageHandler();
   }
@@ -36,55 +44,48 @@ class Monitor extends Component {
     this.props.getAllMonths();
   }
 
-  componentDidUpdate(prevProps) {
-    const data = this.props.data;
-    if(prevProps.fetching && !this.props.fetching) {
-      console.log('MONITOR DID MOUNT UPDATED');
-      this.props.setAllMonths(data);
-      this.getMonthParams(data[data.length-1])
+  componentDidUpdate(prevProps) {    
+    if(prevProps.monthsFetching && !this.props.monthsFetching) {
+      const months = this.props.months;
+      this.getRecord(months[months.length-1])
+      console.log('GET RECORD')
     }
-    if(!prevProps.error && this.props.error) {
-      this.messageHandler.errorMessage(this.props.errorMessage);
+    if(!prevProps.record && this.props.record) {
+      console.log(this.props.record)
+      this.setState({
+        current: this.props.record.current,
+        power: this.props.record.power
+      })
+    }
+    if(!prevProps.monthsError && this.props.monthsError) {
+      this.messageHandler.errorMessage(this.props.monthsErrorMessage);
+    }
+    if(!prevProps.recordError && this.props.recordError) {
+      this.messageHandler.errorMessage(this.props.recordErrorMessage);
     }
   }
 
-  getMonthParams(actual) {
-    console.log('FETCH MONTH PARAMS: ');
+  getRecord(actual) {
     this.setState({
       actual: actual
     });
-    getAllParams({
+    this.props.getAllRecord({
       year: actual.year,
       month: actual.month
-    }, this.props.token)
-    .then(data => {
-      console.log(data[0].data)
-      this.setState({
-        fetching: false,
-        historial: data,
-        current: data[0].data,
-        power: data[1].data
-      })
-    })
-    .catch(err => {
-      this.setState({
-        fetching: false
-      })
-      this.messageHandler.errorMessage(err.message);
     })
   }
 
   render() {
-    const {dates} = this.props;
+    const {months} = this.props;
 
     return (
       <View style={styles.root}>
         <Picker
           selectedValue={this.state.actual}
           style={{ height: 50, width: 200, marginTop: 20 }}
-          onValueChange={(item) => this.getMonthParams(item)}
+          onValueChange={(item) => this.getRecord(item)}
         >
-          {dates.map((m,i) => 
+          {months.map((m,i) => 
             <Picker.Item
               key={i}
               label={monthLabel(m.month) + " " + m.year}
@@ -93,7 +94,7 @@ class Monitor extends Component {
           )}
         </Picker>
         <View style={styles.chartContainer}>          
-          {(!this.state.fetching) ? (
+          {(!this.props.recordFetching) ? (
             <View>
               <View style={styles.chart}>
                 <Text> Corriente </Text>

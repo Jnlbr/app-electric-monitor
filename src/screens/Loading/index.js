@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import Loading from './loading';
-import { setToken, setUser } from '../../store/actions/auth/user';
+import { setToken, setUser } from "../../store/actions/auth/logIn";
 
 const mapDispatchToProps = dispatch => ({
-  setAuth: ({ token, ...user }) => {
-    dispatch(setUser(user));
+  setAuth: ({ token, ...data }) => {
+    dispatch(setUser(data));
     dispatch(setToken(token));
   }
 })

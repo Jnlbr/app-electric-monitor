@@ -19,7 +19,6 @@ import PureChart from 'react-native-pure-chart';
 import HeaderRight from "./headerRight";
 import MessageHandler from '../../utils/messageHandler';
 import { ConfigurationModal } from "../../components";
-import getDeviceParams from "../../api/params/getDeviceParams";
 
 class Device extends Component {
 
@@ -48,10 +47,7 @@ class Device extends Component {
       device: this.props.navigation.getParam('device', {}),
       amps: 0,
       watts: 0,
-      historial: [],
       modalVisible: false,
-      fetching: true,
-      historial: [],
       actual: null
     }
     this.messageHandler = new MessageHandler();
@@ -69,9 +65,8 @@ class Device extends Component {
   }
 
   componentDidMount() {
-    console.log('DID MOUNT')
     const id = this.state.device.id;
-    this.props.getDeviceMonth(id);
+    this.props.getMonths(id);
     this.socket.on('params:' + id, (data) => {
       this.setState({
         amps: this.round(data.amps),
@@ -81,51 +76,35 @@ class Device extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const data = this.props.data;    
-    if(prevProps.fetching && !this.props.fetching) {
-      this.props.setDeviceMonths(data);
-      console.log('DID UPDATING SHIT');
-      this.fetchMonthData(data[data.length-1])
+    if (prevProps.monthsFetching && !this.props.monthsFetching) {
+      const months = this.props.months;
+      this.getRecord(months[months.length - 1]);
     }
-    if(!prevProps.error && this.props.error) {
-      this.messageHandler.errorMessage(this.props.errorMessage);
+    if (!prevProps.monthsError && this.props.monthsError) {
+      this.messageHandler.errorMessage(this.props.monthsErrorMessage);
+    }
+    if (!prevProps.recordError && this.props.recordError) {
+      this.messageHandler.errorMessage(this.props.recordErrorMessage);
     }
   }
 
   componentWillUnmount() {
     this.socket.close();
-    this.props.setDeviceMonths([]);
   }
 
-  fetchMonthData(actual) {
-    console.log('MONTH SELECTED: ');
-    console.log(actual);
-    this.setState({
-      fetching: true,
+  getRecord(actual) {
+    this.setState({      
       actual: actual
     })
-    getDeviceParams({
+    this.props.getRecord({
       id: this.state.device.id,
       year: actual.year,
       month: actual.month
-    }, this.props.token)
-    .then((data) => {
-      console.log('MONTH DATA: ');
-      console.log(data);
-      this.setState({
-        fetching: false,
-        historial: data,
-        actual: actual
-      })
-    })
-    .catch(err => {
-      console.log(data);
-      this.messageHandler.errorMessage(err.message);
     })
   }
 
   render() {
-    let { deviceMonths } = this.props;
+    let { months } = this.props;
 
     return (
       <View style={styles.root}>      
@@ -158,8 +137,8 @@ class Device extends Component {
           <Picker
             selectedValue={this.state.actual}
             style={{ height: 50, width: 200 }}
-            onValueChange={(item) => this.fetchMonthData(item)}>
-            {deviceMonths.map((m,i) => 
+            onValueChange={(item) => this.getRecord(item)}>
+            {months.map((m,i) => 
               <Picker.Item
                 key={i}
                 label={monthLabel(m.month) + " " + m.year} 
@@ -167,9 +146,9 @@ class Device extends Component {
               />
             )}
           </Picker>
-          {(!this.state.fetching) ? (
+          {(!this.props.recordFetching) ? (
             <PureChart
-              data={this.state.historial}
+              data={this.props.record}
               type='line'
             />
           ) : (

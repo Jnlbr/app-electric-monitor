@@ -14,19 +14,20 @@ class Loading extends Component {
   isAuth = async () => {
     try {
       const data = await verifyToken();
-      console.log(data);
       if(data) {
-        console.log('LOADING SCREEN: isAuth - User routes');
-        console.log('DATA: token?');
         this.props.setAuth(data);
         this.props.navigation.navigate('UserRoutes');
       } else {
-        console.log('LOADING SCREEN: isAuth - Auth routes');
         this.props.navigation.navigate('AuthRoutes');  
       }
     } catch(err) {
-      console.log('LOADING SCREEN: isAuth - Auth routes x2');
-      console.log(err);
+      console.log(`
+        PACKAGE: screens/Loading/loading.js
+        CLASS: Loading component
+        METHOD: isAuth
+        API: verifyToken
+        ERROR: ${err}
+      `);
       this.props.navigation.navigate('AuthRoutes');
     }
   }

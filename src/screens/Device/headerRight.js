@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { changeState } from "../../store/actions/device/devices";
 import { ToggleSwitch } from '../../components';
 import MessageHandler from '../../utils/messageHandler';
+import { stateChange } from "../../store/actions/device/getAll";
 import updateStatus from "../../api/device/updateStatus";
 
 class HeaderRight extends React.Component {
@@ -18,7 +18,7 @@ class HeaderRight extends React.Component {
   handleSwitch = async({id, status}) => {
     try {
       await updateStatus({id,status:!status}, this.props.token);
-      this.props.changeState(id);
+      this.props.stateChange(id);
       this.setState({
         device: {
           status: !status
@@ -47,13 +47,11 @@ class HeaderRight extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  changeState: id => {
-    dispatch(changeState(id))
-  },
+  stateChange: id => dispatch(stateChange(id)),
 })
 
-const mapStateToProps = ({ auth: { user } }) => ({
-  token: user.token
+const mapStateToProps = ({ auth: { logIn } }) => ({
+  token: logIn.token
 });
 
 export default connect(mapStateToProps,mapDispatchToProps)(HeaderRight);

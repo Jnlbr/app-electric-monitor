@@ -1,34 +1,32 @@
 import fetchApi from '../../utils/fetchApi';
 
 /**
- * @param form
  * @param token
  */
-export default async (form,token) => {
+export default async (form, token) => {
   console.log(form)
-  console.log(token)
   const options = {
-    method: 'put',
+    method: 'delete',
     credentials: 'include',
-    body: form,
     headers: {
       'x-access-token': token
     },
-    endpoint: '/hardware/update/status'
+    endpoint: '/device/delete',
+    body: form
   }
   try {
     const data = await fetchApi(options);
-    if(data) {
-      console.log(data)
+    if (data) {
       return data;
     } else {
       return null;
     }
-  } catch(err) {
+  } catch (err) {
     console.log(`
-      PACKAGE: api/device/updateStatus
+      PACKAGE: api/device/delete
       METHOD: default
       ERROR: ${err}
     `);
+    throw err;
   }
 }

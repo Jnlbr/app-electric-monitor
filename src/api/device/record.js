@@ -1,5 +1,9 @@
 import fetchApi from '../../utils/fetchApi';
 
+/**
+ * @param {id, year, month}
+ * @token
+ */
 export default async ({ id, year, month }, token) => {
   const options = {
     method: 'get',
@@ -11,14 +15,17 @@ export default async ({ id, year, month }, token) => {
   }
   try {
     const data = await fetchApi(options);
-    if(data) {
+    if (data) {
       return data;
     } else {
-      return null;
+      throw 'Null value received';
     }
-  } catch(err) {
-    console.log('Api: getMonth error: ');
-    console.log(err);
+  } catch (err) {
+    console.log(`
+      PACKAGE: api/device/record.js
+      METHOD: default
+      ERROR: ${err}
+    `);
     throw err;
   }
 }

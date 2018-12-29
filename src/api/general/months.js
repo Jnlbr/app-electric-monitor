@@ -1,8 +1,5 @@
 import fetchApi from '../../utils/fetchApi';
 
-/**
- * @param token
- */
 export default async (token) => {
   const options = {
     method: 'get',
@@ -10,18 +7,23 @@ export default async (token) => {
     headers: {
       'x-access-token': token
     },
-    endpoint: '/device/get/all'
+    endpoint: '/hardware/params/getAll/month'
   }
   try {
     const data = await fetchApi(options);
-    if(data) {
+    if (data) {
+      console.log(`
+        PACKAGE: api/general/record
+        METHOD: default
+        BODY: ${data}
+      `);
       return data;
     } else {
-      return null;
+      throw 'Null value received';
     }
-  } catch(err) {
+  } catch (err) {
     console.log(`
-      PACKAGE: api/device/getAll
+      PACKAGE: api/general/record
       METHOD: default
       ERROR: ${err}
     `);

@@ -1,36 +1,40 @@
 import { combineReducers } from 'redux';
 // Auth reducers
-import { userReducer } from './actions/auth/user';
 import { logInReducer } from './actions/auth/logIn';
-// Device reducers 
+// Devices reducers 
 import { getAllReducer } from './actions/device/getAll';
-import { devicesReducer } from "./actions/device/devices";
-// Params reducers
-import { 
-  getDeviceMonthReducer,
-  getAllMonthReducer
-} from "./actions/params/deviceFetchReducers";
-import { deviceParamsReducer } from "./actions/params/deviceParams";
+import { getMonthsReducer } from "./actions/device/months";
+import { getRecordReducer } from "./actions/device/record";
+import { deleteReducer } from "./actions/device/delete";
+// General reducer
+import { getAllMonthsReducer } from "./actions/general/months";
+import { getAllRecordReducer } from "./actions/general/record";
+// Register reducer
+import { registerDeviceReducer } from "./actions/register/device";
 
-const paramsReducer = combineReducers({
-  getDeviceMonth: getDeviceMonthReducer,
-  getAllMonth: getAllMonthReducer,
-  params: deviceParamsReducer, 
+const authReducer = combineReducers({
+  logIn: logInReducer
 })
 const deviceReducer = combineReducers({
   getAll: getAllReducer,
-  devices: devicesReducer
+  months: getMonthsReducer,
+  record: getRecordReducer,
+  delete: deleteReducer
 })
-const authReducer = combineReducers({
-  user: userReducer,
-  logIn: logInReducer
+const generalReducer = combineReducers({
+  months: getAllMonthsReducer,
+  record: getAllRecordReducer
+})
+const registerReducer = combineReducers({
+  device: registerDeviceReducer
 })
 
 // MAIN REDUCER
 const appReducer = combineReducers({
   auth: authReducer,
   device: deviceReducer,
-  params: paramsReducer
+  general: generalReducer,
+  register: registerReducer
 });
 
 const rootReducer = (state, action) => {

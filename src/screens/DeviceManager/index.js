@@ -1,26 +1,18 @@
 import DeviceManager from './deviceManager';
 import { connect } from 'react-redux';
-import { getAll } from '../../store/actions/device/getAll';
-import { setDevices, changeState } from "../../store/actions/device/devices";
+import { getAll, stateChange } from '../../store/actions/device/getAll';
 
 const mapDispatchToProps = dispatch => ({
-  getAll: () => {
-    dispatch(getAll());
-  },
-  changeState: id => {
-    dispatch(changeState(id))
-  },
-  setDevices: devices => {
-    dispatch(setDevices(devices))
-  }
+  getAll: () => dispatch(getAll()),
+  stateChange: id => dispatch(stateChange(id))
 })
-const mapStateToProps = ({ device: { getAll, devices }, auth: { user } }) => ({
+
+const mapStateToProps = ({ device: { getAll }, auth: { logIn } }) => ({
   fetching: getAll.fetching,
   error: getAll.error,
   errorMessage: getAll.errorMessage,
-  data: getAll.data,
-  devices: devices.data,
-  token: user.token
+  devices: getAll.data,
+  token: logIn.token
 });
 
 export default connect(mapStateToProps,mapDispatchToProps)(DeviceManager);

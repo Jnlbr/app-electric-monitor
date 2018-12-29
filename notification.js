@@ -74,8 +74,8 @@ class Notification extends Component {
   }
 }
 
-const mapStateToProps = ({ auth: { user }}) => ({
-  token: user.token
+const mapStateToProps = ({ auth: { logIn }}) => ({
+  token: logIn.token
 })
 
 export default connect(mapStateToProps)(Notification);

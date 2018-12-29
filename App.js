@@ -5,8 +5,8 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import reducer from './src/store';
-import colors from './src/contants/colors';
 import Notification from './notification';
+import { ProviderTheme } from 'styled-components/native';
 
 const store = createStore(
   reducer,
@@ -18,10 +18,12 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <View style={styles.container}>
-          <Notification />
-          <Routes />
-        </View>
+        {/* <ProviderTheme> */}
+          <View style={styles.container}>
+            <Notification />
+            <Routes />
+          </View>
+        {/* </ProviderTheme> */}
       </Provider>
     );
   }

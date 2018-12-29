@@ -1,7 +1,7 @@
 import LogIn from './logIn';
 import { connect } from 'react-redux';
-import { logIn } from '../../store/actions/auth/logIn';
-import { setUser, setToken } from '../../store/actions/auth/user';
+import { logIn, setToken } from '../../store/actions/auth/logIn';
+// import { setUser, setToken } from '../../store/actions/auth/user';
 
 // export {default} from './LogIn';
 const mapDispatchToProps = dispatch => ({
@@ -9,7 +9,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(logIn(form));
   },
   setAuth: ({ token, ...user }) => {
-    dispatch(setUser(user));
+    // dispatch(setUser(user));
     dispatch(setToken(token));
   }
 })

@@ -19,19 +19,20 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "d3-shape": "1.2.0",
     "expo": "^27.0.1",
     "react": "16.3.1",
     "react-native": "~0.55.2",
     "react-native-elements": "^0.19.1",
     "react-native-pure-chart": "^0.0.24",
+    "react-native-svg-charts": "2.1.0",
     "react-navigation": "^2.18.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-saga": "^0.16.2",
     "redux-thunk": "^2.3.0",
     "socket.io-client": "^2.1.1",
-    "d3-shape": "1.2.0",
-    "react-native-svg-charts": "2.1.0"
+    "styled-components": "^4.1.3"
   },
   "author": "Jean Lambert <jeeaan1702@gmail.com>",
   "license": "MIT"

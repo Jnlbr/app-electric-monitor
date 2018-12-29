@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import {
    View,
    ScrollView,
-   TouchableOpacity
+   TouchableOpacity,
+   Text
 } from 'react-native';
 import { DrawerItems, SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -11,20 +12,9 @@ import styles from './styles/drawer';
 import logOut from '../api/auth/logOut';
 import { connect } from 'react-redux';
 
-class Drawer extends React.Component {
-
+class Drawer extends Component {
   constructor(props) {
     super(props);
-  }
-
-  handleLogOut() {
-    console.log(this.props)
-    logOut().then(() => {
-      // this.props.logOut();
-      // this.props.navigation.navigate('AuthRoutes')
-    }).catch(err => {
-      console.log(err);
-    })
   }
 
   render() {
@@ -34,7 +24,8 @@ class Drawer extends React.Component {
           <SafeAreaView
             style={{flex:1}}
             forceInset={{ top: 'always', horizontal: 'never' }}
-          ><DrawerItems activeTintColor="white" inactiveTintColor="white" {...this.props} />
+          >
+            <Text> JEAN LAMBERT </Text>
           </SafeAreaView>               
         </ScrollView>
         <View style={styles.footerContainer}>

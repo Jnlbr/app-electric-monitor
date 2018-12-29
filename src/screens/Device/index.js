@@ -1,27 +1,24 @@
 import Device from './device';
 import { connect } from 'react-redux';
-import { 
-  getDeviceMonth 
-} from '../../store/actions/params/deviceFetchReducers';
-import { setDeviceMonths } from "../../store/actions/params/deviceParams";
+import { getMonths } from "../../store/actions/device/months";
+import { getRecord } from "../../store/actions/device/record";
 
 const mapDispatchToProps = dispatch => ({
-  setDeviceMonths: months => {
-    dispatch(setDeviceMonths(months));
-  },
-  getDeviceMonth: (id) => {
-    dispatch(getDeviceMonth({form: id}))
-  }
+  getMonths: (id) => dispatch(getMonths({form: id})),
+  getRecord: (act) => dispatch(getRecord({form: act}))
 })
-const mapStateToProps = ({ params: { getDeviceMonth, params }, auth: { user }}) => ({
-  fetching: getDeviceMonth.fetching,
-  error: getDeviceMonth.error,
-  errorMessage: getDeviceMonth.errorMessage,
-  data: getDeviceMonth.data,
+const mapStateToProps = ({ device : { months, record }, auth: { logIn }}) => ({
+  monthsFetching: months.fetching,
+  monthsError: months.error,
+  monthsErrorMessage: months.errorMessage,
+  months: months.data,
+  
+  recordFetching: record.fetching,
+  recordError: record.error,
+  recordErrorMessage: record.errorMessage,
+  record: record.data,
 
-  deviceMonths: params.deviceMonths,
-
-  token: user.token,
+  token: logIn.token
 });
 
 export default connect(mapStateToProps,mapDispatchToProps)(Device);
