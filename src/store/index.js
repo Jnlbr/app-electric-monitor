@@ -6,6 +6,7 @@ import { getAllReducer } from './actions/device/getAll';
 import { getMonthsReducer } from "./actions/device/months";
 import { getRecordReducer } from "./actions/device/record";
 import { deleteReducer } from "./actions/device/delete";
+import { updateDataReducer } from "./actions/device/updateData";
 // General reducer
 import { getAllMonthsReducer } from "./actions/general/months";
 import { getAllRecordReducer } from "./actions/general/record";
@@ -19,7 +20,8 @@ const deviceReducer = combineReducers({
   getAll: getAllReducer,
   months: getMonthsReducer,
   record: getRecordReducer,
-  delete: deleteReducer
+  delete: deleteReducer,
+  updateData: updateDataReducer
 })
 const generalReducer = combineReducers({
   months: getAllMonthsReducer,

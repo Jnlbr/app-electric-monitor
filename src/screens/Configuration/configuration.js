@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import { 
   View,
   Text,
-  Button,
   CheckBox
 } from 'react-native';
+import { FormLabel, FormInput, Button } from 'react-native-elements'
 import styles from './styles/configuration';
-import Input from '../../components/input';
-import usernameImg from '../../assets/icons/user-input.png';
 import colors from '../../contants/colors';
 
 class Configuration extends Component {
   state = {
-    device: {}
+    device: {},
+    name: '',
+    voltage: 1,
   }
   
   static navigationOptions = {
@@ -28,11 +28,17 @@ class Configuration extends Component {
 
   componentDidMount() {
     const device = this.props.navigation.getParam('device', { name: 'Device' });
-    this.setState({ device });
+    console.log(device);
+    this.setState({ device, name: device.name, voltage: device.voltage });
   }
 
   componentDidUpdate(prevProps) {
     if (!prevProps.deleteData && this.props.deleteData) {
+      this.props.removeDevice(this.state.device.id);
+      this.props.navigation.goBack();
+    }
+    if (!prevProps.data && this.props.data) {      
+      this.props.updateDevice(this.props.data);
       this.props.navigation.goBack();
     }
   }
@@ -41,36 +47,31 @@ class Configuration extends Component {
     return (
         <View style={styles.container}>
           <View style={{paddingHorizontal: 15, flex: 1}}>
-            <Input
-              source={usernameImg}
-              textContentType="username"
-              placeholder="Device name"
-              placeholderTextColor="white"
-              // Change name
-              onChangeText={() => console.log('Do something else')}
-              value=""
-              containerStyle={styles.input}
-            />
-            <CheckBox
-              center
-              title='ON OFF NOTIFICATION'
-              checked={true}
-            />
+            <FormLabel> Name </FormLabel>
+            <FormInput onChangeText={name => this.setState({ name })} />
+            <FormLabel> Voltage </FormLabel>
+            <FormInput textContentType="telephoneNumber" onChangeText={voltage => this.setState({ voltage })} />
+              {/* <CheckBox
+                center
+                title='ON OFF NOTIFICATION'
+                checked={true}
+              /> */}
           </View>
           <Button
-            title="ACCEPT"
+            title="Make changes"
+            loading={this.props.updateFetching}
             // FETCH TO EMIT THE CHANGES
-            onPress={() => console.log('ACCEPT')}
-            backgroundColor='#F04A58'
-            containerViewStyle={{paddingVertical: 5, flex: 1}}
+            onPress={() => this.props.updateData({ form: { id: this.state.device.id, name: this.state.name, voltage: this.state.voltage }})}
+            backgroundColor='blue'
+            containerViewStyle={{paddingVertical: 5}}
             borderRadius={5}
           />
           <Button
             title="DELETE"
-            // FETCH TO EMIT THE CHANGES
+            loading={this.props.deleteFetching}
             onPress={() => this.props.deleteDevice({ form: { id: this.state.device.id }})}
             backgroundColor='red'
-            containerViewStyle={{paddingVertical: 5, flex: 1}}
+            containerViewStyle={{paddingVertical: 5}}
             borderRadius={5}
           />
     </View>

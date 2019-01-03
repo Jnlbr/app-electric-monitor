@@ -47,17 +47,11 @@ class Device extends Component {
       device: this.props.navigation.getParam('device', {}),
       amps: 0,
       watts: 0,
-      modalVisible: false,
-      actual: null
+      actual: null,
+      isEmpty: false,
     }
     this.messageHandler = new MessageHandler();
     this.socket = SocketIOClient.connect(API_URL + '/user');
-  }
-
-  setModalVisible(visible) {
-    this.setState({
-      modalVisible: visible
-    });
   }
 
   round(num) {
@@ -67,6 +61,7 @@ class Device extends Component {
   componentDidMount() {
     const id = this.state.device.id;
     this.props.getMonths(id);
+    console.log('didmount')
     this.socket.on('params:' + id, (data) => {
       this.setState({
         amps: this.round(data.amps),
@@ -78,7 +73,14 @@ class Device extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.monthsFetching && !this.props.monthsFetching) {
       const months = this.props.months;
-      this.getRecord(months[months.length - 1]);
+      console.log(months);
+      if(months.length > 0) {
+        this.getRecord(months[months.length - 1]);
+      } else {
+        this.setState({
+          isEmpty: true,
+        })
+      }      
     }
     if (!prevProps.monthsError && this.props.monthsError) {
       this.messageHandler.errorMessage(this.props.monthsErrorMessage);
@@ -105,13 +107,10 @@ class Device extends Component {
 
   render() {
     let { months } = this.props;
+    let { isEmpty } = this.state;
 
     return (
-      <View style={styles.root}>      
-        <ConfigurationModal 
-          setModalVisible={this.setModalVisible} 
-          modalVisible={this.state.modalVisible}
-        />
+      <View style={styles.root}>
         <View style={styles.params}>
         <View style={styles.amps}>
           <Text style={styles.valueContainer}>
@@ -133,29 +132,40 @@ class Device extends Component {
         </View>
         </View>
         <Divider style={styles.divider}/>
-        <View style={styles.chartContainer}>
-          <Picker
-            selectedValue={this.state.actual}
-            style={{ height: 50, width: 200 }}
-            onValueChange={(item) => this.getRecord(item)}>
-            {months.map((m,i) => 
-              <Picker.Item
-                key={i}
-                label={monthLabel(m.month) + " " + m.year} 
-                value={m}
+        <View style={styles.chartContainer}>          
+          {(isEmpty) ? (
+            <View>
+              <Text> No hay informacion disponible </Text>
+            </View>
+          ) : (
+            <View>
+              {(!this.props.recordFetching) ? (
+              <View>
+                <Picker
+                  selectedValue={this.state.actual}
+                  style={{ height: 50, width: 200 }}
+                  onValueChange={(item) => this.getRecord(item)}
+                >
+                  {months.map((m, i) =>
+                    <Picker.Item
+                      key={i}
+                      label={monthLabel(m.month) + " " + m.year}
+                      value={m}
+                    />
+                  )}
+                </Picker>
+                <PureChart
+                  data={this.props.record}
+                  type='line'
+                />
+              </View>
+            ) : (
+              <ActivityIndicator 
+                size="large" 
+                color="red"
               />
             )}
-          </Picker>
-          {(!this.props.recordFetching) ? (
-            <PureChart
-              data={this.props.record}
-              type='line'
-            />
-          ) : (
-            <ActivityIndicator 
-              size="large" 
-              color="red"
-            />
+            </View>
           )}
           <View style={styles.badgesContainer}>            
             <View style={{flexDirection:'row'}}>
@@ -168,13 +178,6 @@ class Device extends Component {
                 value="Power"
               />
             </View>
-            <Button
-              title="Configuracion"
-              onPress={() => this.setModalVisible(true)}
-              backgroundColor='#F04A58'
-              containerViewStyle={{paddingVertical: 10}}
-              borderRadius={5}
-            />
           </View>
         </View>
       </View>

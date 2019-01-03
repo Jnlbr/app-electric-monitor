@@ -31,7 +31,8 @@ class AddDevice extends Component {
 
   componentDidUpdate(prevProps) {
     if (!prevProps.data && this.props.data) {
-      console.log('GO BACK')
+      this.props.addDevice(this.props.data);
+      console.log(this.props.data);
       this.props.navigation.navigate('DeviceManager');
     }
   }

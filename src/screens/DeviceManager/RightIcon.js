@@ -10,7 +10,7 @@ import colors from '../../contants/colors';
 export default ({ device, onStatusChange, onOption }) => (
   <View>
     <Button 
-      title="Options"
+      title="Configuracion"
       onPress={onOption}
     />
     {(device.active) && (

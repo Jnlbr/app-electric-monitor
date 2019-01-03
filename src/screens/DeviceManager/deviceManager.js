@@ -60,6 +60,7 @@ class DeviceManager extends Component {
 
 
   render() {
+    console.log(this.props.devices)
     return (
       <View style={styles.root}>
         {(this.props.fetching) ? (
