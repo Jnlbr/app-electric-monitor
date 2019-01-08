@@ -1,6 +1,7 @@
 import React from 'react';
+import { Switch } from 'react-native'
 import { connect } from 'react-redux';
-import { ToggleSwitch } from '../../components';
+import { ToggleSwitch, } from '../../components';
 import MessageHandler from '../../utils/messageHandler';
 import { stateChange } from "../../store/actions/device/getAll";
 import updateStatus from "../../api/device/updateStatus";
@@ -10,19 +11,20 @@ class HeaderRight extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      device: this.props.device
+      status: this.props.device.status,
+      active: this.props.device.active
     }
     this.messageHandler = new MessageHandler();
   }
   
-  handleSwitch = async({id, status}) => {
+  handleSwitch = async(id, status) => {
     try {
       await updateStatus({id,status:!status}, this.props.token);
       this.props.stateChange(id);
       this.setState({
-        device: {
+        // device: {
           status: !status
-        }
+        // }
       })
     } catch(err) {
       this.messageHandler.errorMessage(err);
@@ -30,17 +32,15 @@ class HeaderRight extends React.Component {
   }
 
   render() {
-    const device = this.state.device;
+    const { status } = this.state;
+    const { device } = this.props;
     
     return (
-      <ToggleSwitch
-        isOn={device.status}
-        onColor="green"
-        offColor="red"
-        size="small"
-        onToggle={(isOn) => {
-          this.handleSwitch(device);
-        }}
+      <Switch 
+        trackColor={{true:'blue', false:'red'}}
+        disabled={!this.state.active}
+        value={this.state.status}
+        onValueChange={() => this.handleSwitch(device.id, status)}
       />
     )
   }
@@ -55,3 +55,15 @@ const mapStateToProps = ({ auth: { logIn } }) => ({
 });
 
 export default connect(mapStateToProps,mapDispatchToProps)(HeaderRight);
+
+
+
+/*<ToggleSwitch
+    isOn={device.status}
+    onColor="green"
+    offColor="red"
+    size="small"
+    onToggle={(isOn) => {
+      this.handleSwitch(device);
+    }}
+  /> */

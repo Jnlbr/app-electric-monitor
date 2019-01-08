@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import {
-  View
+  View,
+  StyleSheet
 } from 'react-native';
-import { FormLabel, FormInput, Button } from 'react-native-elements'
+import { Input, Button } from 'react-native-elements'
 import colors from '../../contants/colors';
-
+import styles from './styles';
+import MessageHandler from '../../utils/messageHandler';
+import emptyFields from '../../utils/emptyFields';
 
 class AddDevice extends Component {
 
@@ -14,8 +17,9 @@ class AddDevice extends Component {
     this.state = {
       type: 2,
       name: '',
-      voltage: 0
+      voltage: null
     }
+    this.messageHandler = new MessageHandler();
   }
 
   static navigationOptions = {
@@ -37,17 +41,48 @@ class AddDevice extends Component {
     }
   }
 
+  registerDevice = () => {
+    if (isNaN(this.state.voltage)) {
+      this.messageHandler.centerMessage('El voltaje tiene que ser numerico');
+    } else {
+      this.props.registerDevice({ form: this.state });
+    }
+  }
+
   render() {
+    const disabled = emptyFields(this.state);
 
     return (
-      <View>
-        <FormLabel>Name</FormLabel>
-        <FormInput onChangeText={name => this.setState({ name })} />
-        <FormLabel>Voltage</FormLabel>
-        <FormInput 
-          textContentType="telephoneNumber"
-          onChangeText={voltage => this.setState({ voltage })} />
-        <Button title="CREATE" onPress={() => this.props.registerDevice({ form: this.state })}/>
+      <View style={styles.container}>
+        <View style={styles.form}>
+          <Input
+            shake={true}
+            placeholder='Name'
+            onChangeText={name => this.setState({ name })}
+            containerStyle={{
+              marginBottom: 10,
+            }}
+          />
+          <Input
+            placeholder='Voltages'
+            onChangeText={voltage => this.setState({ voltage })}
+            errorMessage="El valor tiene que ser numerico"
+          />
+        </View>
+        <Button
+          disabled={disabled}
+          loading={this.props.fetching}
+          title="Agregar" 
+          onPress={this.registerDevice}
+          buttonStyle={{
+            backgroundColor: '#1194f6',
+            width: 300,
+            height: 45,
+            marginTop: 10,
+            marginBottom: 20,
+            borderRadius: 5
+          }}
+        />
       </View>
     )
   }

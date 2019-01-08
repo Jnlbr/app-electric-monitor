@@ -19,8 +19,11 @@ export default async (form) => {
       return null;
     }
   } catch(err) {
-    console.log('Api: LogIn error: ');
-    console.log(err);
+    console.log(`
+      PACKAGE: api/auth/logIn
+      METHOD: default
+      ERROR: ${err}
+    `);
     throw err;
   }
 }

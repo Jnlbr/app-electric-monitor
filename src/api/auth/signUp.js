@@ -1,11 +1,7 @@
-import fetchApi from '../../../utils/fetchApi';
+import fetchApi from '../../utils/fetchApi';
 
 /**
- * @param firstname
- * @param lastname
- * @param email
- * @param username
- * @param password
+ * @param form
  */
 export default async (form) => {
   const options = {
@@ -20,11 +16,21 @@ export default async (form) => {
   try {
     const data = await fetchApi(options);
     if(data) {
+      console.log(`
+        PACKAGE: api/auth/signUp
+        METHOD: default
+        DATA: ${JSON.stringify(data)}
+      `);
       return data;
     } else {
       return null;
     }
   } catch(err) {
+    console.log(`
+      PACKAGE: api/auth/signUp
+      METHOD: default
+      ERROR: ${err}
+    `);
     throw err;
   }
 }

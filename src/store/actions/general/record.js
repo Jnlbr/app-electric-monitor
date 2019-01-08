@@ -5,7 +5,7 @@ const getAllRecordPattern = createFetchPattern({
   actionName: 'GET_ALL_RECORD',
   cb: getAllRecordApi,
   initialState: {
-    data: null
+    data: []
   }
 });
 

@@ -11,13 +11,13 @@ export default createStackNavigator(
     LogIn: {
       screen: LogInScreen,
       navigationOptions: ({ navigation }) => ({
-        title: 'Log In'
+        title: 'Iniciar sesion'
       })
     },
     SignUp: {
       screen: SignUpScreen,
       navigationOptions: ({ navigation }) => ({
-        title: 'Sign Up'
+        title: 'Registrar'
       })
     },
     LicenseScreen: {

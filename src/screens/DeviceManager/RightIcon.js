@@ -2,25 +2,23 @@ import React from 'react';
 import { 
   View,
   Text,
-  Button
+  Button,
+  StyleSheet
 } from 'react-native';
-import { ToggleSwitch } from '../../components';
-import colors from '../../contants/colors';
 
-export default ({ device, onStatusChange, onOption }) => (
-  <View>
-    <Button 
+export default ({ onOption }) => (
+  <View style={styles.container}>
+    <Button
       title="Configuracion"
       onPress={onOption}
     />
-    {(device.active) && (
-      <ToggleSwitch
-        isOn={device.status}
-        onColor="green"
-        offColor="red"
-        size="small"
-        onToggle={onStatusChange}
-      />
-    )}
   </View>
 )
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    marginRight: 20,
+  },
+})

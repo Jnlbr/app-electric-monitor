@@ -10,12 +10,16 @@ const getAllPattern = createFetchPattern({
     [devicesConst.ADD_DEVICE]: (state,action) => ({ ...state, data: [...state.data, action.payload]}),
     [devicesConst.REMOVE_DEVICE]: (state,action) => ({ ...state, data: state.data.filter(d => d.id!=action.id)}),
     [devicesConst.UPDATE_DEVICE]: (state,action) => {
-      let data = state.data;
-      let i = data.findIndex(d => d.id === action.payload.id);
-      console.log(i);
-      data[i] = action.payload;
-      console.log(data)
-      return { ...state, data: data }
+      return { 
+        ...state,
+        data: state.data.map(d => {
+          if (d.id == action.payload.id) {
+            return action.payload
+          } else {
+            return d;
+          }
+        })
+      }
     }
   },
   initialState: {

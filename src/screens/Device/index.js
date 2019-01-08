@@ -1,4 +1,4 @@
-import Device from './device';
+import Device from './Device';
 import { connect } from 'react-redux';
 import { getMonths } from "../../store/actions/device/months";
 import { getRecord } from "../../store/actions/device/record";

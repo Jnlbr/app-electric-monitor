@@ -3,7 +3,8 @@ import {
   } from 'react-native';
   
   class MessageHandler {
-    errorMessage = (errorMessage) => ToastAndroid.showWithGravity(errorMessage, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+    errorMessage = (message) => ToastAndroid.showWithGravity(message, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+    centerMessage = (message) => ToastAndroid.showWithGravity(message, ToastAndroid.SHORT, ToastAndroid.CENTER);
   }
   
   export default MessageHandler;

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import Loading from './loading';
+import Loading from './Loading';
 import { setToken, setUser } from "../../store/actions/auth/logIn";
 
 const mapDispatchToProps = dispatch => ({

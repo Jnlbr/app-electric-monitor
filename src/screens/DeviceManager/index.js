@@ -1,4 +1,4 @@
-import DeviceManager from './deviceManager';
+import DeviceManager from './DeviceManager';
 import { connect } from 'react-redux';
 import { getAll, stateChange } from '../../store/actions/device/getAll';
 

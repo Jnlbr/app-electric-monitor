@@ -1,29 +1,44 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { 
   View,
-  Text,
   Picker,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity
 } from 'react-native';
-import {
-  Divider,
-  Badge,
-  Button,
-} from 'react-native-elements';
+import { Text, Divider, Badge } from 'react-native-elements';
 import colors from '../../contants/colors';
 import SocketIOClient from 'socket.io-client';
 import { API_URL } from "../../utils/config";
 import monthLabel from "../../utils/monthLabel";
-import styles from './styles/device';
-import PureChart from 'react-native-pure-chart';
-import HeaderRight from "./headerRight";
+import styles from './styles';
+import HeaderRight from "./HeaderRight";
+import { ChartContainer } from '../../components';
 import MessageHandler from '../../utils/messageHandler';
-import { ConfigurationModal } from "../../components";
 
 class Device extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      device: this.props.navigation.getParam('device', {}),
+      
+      current: [],
+      power: [],
+
+      actual: null,
+      selected: 0, // To selected between current and power (0 = current, 1 = power)
+      record: null,
+
+      isEmpty: false,
+      active: false
+    }
+    this.messageHandler = new MessageHandler();
+    this.socket = SocketIOClient.connect(API_URL + '/user');
+  }
+
   static navigationOptions = ({ navigation }) => {
-    const device = navigation.getParam('device', { name: 'Device' });
+    const device = navigation.getParam('device', {name:'Device'});
     return {
       title: device.name,
       headerStyle: {
@@ -34,46 +49,38 @@ class Device extends Component {
         fontWeight: 'bold',
       },
       headerRight: (
-        <View style={{marginRight: 3}}>
-          <HeaderRight device={device} />
+        <View style={{ marginRight: 3 }}>
+          <HeaderRight device={device}/>
         </View>
       )
     }
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      device: this.props.navigation.getParam('device', {}),
-      amps: 0,
-      watts: 0,
-      actual: null,
-      isEmpty: false,
-    }
-    this.messageHandler = new MessageHandler();
-    this.socket = SocketIOClient.connect(API_URL + '/user');
-  }
-
-  round(num) {
-    return Math.round(num*100) / 100;
-  }
-
   componentDidMount() {
-    const id = this.state.device.id;
+    const { id, active } = this.state.device;
     this.props.getMonths(id);
-    console.log('didmount')
-    this.socket.on('params:' + id, (data) => {
-      this.setState({
-        amps: this.round(data.amps),
-        watts: this.round(data.watts)
+
+    if(active) {
+      this.socket.on('params:' + id, (data) => {
+        let { current, power } = this.state;
+        if (current.length > 40) {
+          current.shift();
+        }
+        if (power.length > 40) {
+          power.shift();
+        }
+        this.setState({
+          current: [...current, data.amps],
+          power: [...power, data.watts]
+        });
       });
-    });
+    }
+    this.setState({ active });
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.monthsFetching && !this.props.monthsFetching) {
       const months = this.props.months;
-      console.log(months);
       if(months.length > 0) {
         this.getRecord(months[months.length - 1]);
       } else {
@@ -81,6 +88,14 @@ class Device extends Component {
           isEmpty: true,
         })
       }      
+    }
+    if(prevProps.recordFetching && !this.props.recordFetching) {
+      const record = this.props.record;
+      if(record.length > 0) {
+        this.setState({
+          record: record[this.state.selected]
+        })
+      }
     }
     if (!prevProps.monthsError && this.props.monthsError) {
       this.messageHandler.errorMessage(this.props.monthsErrorMessage);
@@ -105,82 +120,104 @@ class Device extends Component {
     })
   }
 
+  handleBadgePress = (record,i) => this.setState({ record, selected: i })
+
   render() {
     let { months } = this.props;
-    let { isEmpty } = this.state;
+    let { isEmpty, active, current, power } = this.state;
 
     return (
-      <View style={styles.root}>
-        <View style={styles.params}>
-        <View style={styles.amps}>
-          <Text style={styles.valueContainer}>
-            Corriente:
-          <Text style={styles.value}>
-            {this.state.amps}
-          </Text>
-          <Text>a</Text>
-          </Text>
-        </View>
-        <View style={styles.watts}>
-          <Text style={styles.valueContainer}>
-            Potencia:
-          <Text style={styles.value}>
-            {this.state.watts}
-          </Text>
-          <Text>w</Text>
-          </Text>
-        </View>
-        </View>
-        <Divider style={styles.divider}/>
-        <View style={styles.chartContainer}>          
-          {(isEmpty) ? (
+      <ScrollView style={styles.root}>
+        <View style={styles.realTime}>
+          <Text h3> Consumo a tiempo real </Text>
+          {(active) ? (
             <View>
-              <Text> No hay informacion disponible </Text>
+              {(current.length > 0) ? (
+                <View style={{ marginTop: 15, marginHorizontal: 5 }}>
+                  <ChartContainer
+                    title="Lectura de corriente"
+                    data={current}
+                    type="line"
+                  />
+                  <View style={{ marginVertical: 10 }} />
+                  <ChartContainer
+                    title="Lectura de potencia"
+                    data={power}
+                    type="line"
+                  />
+                </View>
+              ) : (
+                  <View style={styles.waiting}>
+                    <Text> Esperando por datos... </Text>
+                    <ActivityIndicator color="red" />
+                  </View>
+                )}
             </View>
           ) : (
-            <View>
-              {(!this.props.recordFetching) ? (
               <View>
-                <Picker
-                  selectedValue={this.state.actual}
-                  style={{ height: 50, width: 200 }}
-                  onValueChange={(item) => this.getRecord(item)}
-                >
-                  {months.map((m, i) =>
-                    <Picker.Item
-                      key={i}
-                      label={monthLabel(m.month) + " " + m.year}
-                      value={m}
-                    />
-                  )}
-                </Picker>
-                <PureChart
-                  data={this.props.record}
-                  type='line'
-                />
+                <Text> El dispositivo no se encuentra disponible </Text>
               </View>
-            ) : (
-              <ActivityIndicator 
-                size="large" 
-                color="red"
-              />
             )}
-            </View>
-          )}
-          <View style={styles.badgesContainer}>            
-            <View style={{flexDirection:'row'}}>
-              <Badge
-                containerStyle={{backgroundColor:'blue'}}
-                value="Current"
-              />
-              <Badge
-                containerStyle={{backgroundColor: 'green'}}
-                value="Power"
-              />
-            </View>
-          </View>
         </View>
-      </View>
+
+        <Divider style={styles.divider} />
+
+        <View style={styles.record}>
+          <Text h3> Historial de consumo </Text>
+          {(isEmpty) ? (            
+            <Text> No hay informacion disponible </Text>
+          ) : (
+            <Fragment>
+              {(!this.props.recordFetching && this.state.record != null) ? (
+                <Fragment>
+                  <Picker
+                    mode="dropdown"
+                    selectedValue={this.state.actual}
+                    style={{ height: 50, width: 200 }}
+                    onValueChange={(item) => this.getRecord(item)}
+                  >
+                    {months.map((m, i) =>
+                      <Picker.Item
+                        key={i}
+                        label={monthLabel(m.month) + " " + m.year}
+                        value={m}
+                      />
+                    )}
+                  </Picker>
+                  <View style={styles.recordData}>
+                    <View style={styles.badges}>
+                      {this.props.record.map((r,i) => (
+                        <Badge
+                          key={i}
+                          component={TouchableOpacity}
+                          onPress={() => this.handleBadgePress(r,i)}
+                          containerStyle={{
+                            backgroundColor: r.color,
+                            marginBottom: 2.5
+                          }}
+                          value={r.seriesName}
+                        />  
+                      ))}
+                    </View>
+                    <View style={styles.recordChart}>
+                      <ChartContainer
+                        title={this.state.record.seriesName}
+                        data={this.state.record.data}
+                        type="line"
+                      />
+                    </View>
+                  </View>                  
+                  </Fragment>
+              ) : (
+                <ActivityIndicator 
+                  size="large" 
+                  color="red"
+                />
+              )}
+            </Fragment>
+          )}
+        </View>
+      </ScrollView>
     )
   }
 }

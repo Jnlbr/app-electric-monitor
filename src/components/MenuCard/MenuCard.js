@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Card } from 'react-native-elements';
-import styles from './styles/menuCard';
+import styles from './styles';
 import styled from 'styled-components/native';
 
 export default ({ title, image, onPress }) => (
@@ -27,15 +27,4 @@ export default ({ title, image, onPress }) => (
 
     </Card>
   </TouchableOpacity>
-)
-
-// export default ({ title, image, onPress }) => (
-//   <View style={{
-//       marginTop: 20,
-//       marginLeft: 40,
-//       marginRight: 40,
-//       backgroundColor: 'blue'
-//   }}>
-
-//   </View>
-// )
+);

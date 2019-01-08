@@ -14,108 +14,117 @@ import verificationImg from '../../assets/icons/lock-reset.png';
 import emptyFields from '../../utils/emptyFields';
 import { Input } from '../../components';
 import styles from './styles/signUp';
+import MessageHandler from '../../utils/messageHandler';
 
 class SignUp extends Component {
-	state = {
-		username: '',
-		name: '',
-		password: '',
-		verification: '',
-		email: '',
-		code: ''
-	}
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: 'aaasd',
+      name: 'asdasd',
+      password: '1234',
+      verification: '1234',
+      email: 'sosme@gmasdadsasdasail.com',
+      code: '123s'
+    }
+    this.messageHandler = new MessageHandler();
+  }
 
-	handleTextChange = (input) => (value) => this.setState({[input]: value});
+  handleTextChange = (input) => (value) => this.setState({[input]: value});
+  
+  componentDidUpdate(prevProps) {
+    const data = this.props.data
+    console.log(data)
+    if (data && !prevProps.data) {
+      
+      this.props.setAuth(data);
+      this.props.navigation.navigate('UserRoutes');
+    }
+    if (this.props.error && !prevProps.error) {
+      this.messageHandler.errorMessage(this.props.errorMessage);
+    }
+  }
 
 	render() {
-
-		const disabled = emptyFields(this.state);
+    const disabled = emptyFields(this.state);
+    
 		return (
-			// <ImageBackground source={backgroundImg} style={{width: '100%', height: '100%'}} blurRadius={2.5}>
-				<KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-					<Input
-						source={usernameImg}
-						textContentType="username"
-						placeholder="Username"
-						placeholderTextColor="white"
-						onChangeText={this.handleTextChange('username')}
-						value={this.state.username}
-						containerStyle={styles.input}
-					/>
-					<Input
-						source={usernameImg}
-						textContentType="name"
-						placeholder="Name"
-						placeholderTextColor="white"
-						onChangeText={this.handleTextChange('name')}
-						value={this.state.name}
-						containerStyle={styles.input}
-						autoCapitalize="words"
-					/>
-					<Input
-						source={passwordImg}
-						textContentType="password"
-						placeholder="Password"
-						placeholderTextColor="white"
-						onChangeText={this.handleTextChange('password')}
-						value={this.state.password}
-						secureTextEntry={true}
-						containerStyle={styles.input}
-					/>
-					<Input
-						source={verificationImg}
-						textContentType="password"
-						placeholder="Confirm Password"
-						placeholderTextColor="white"
-						onChangeText={this.handleTextChange('verification')}
-						value={this.state.verification}
-						secureTextEntry={true}
-						containerStyle={styles.input}
-					/>
-					<Input
-						source={emailImg}
-						textContentType="emailAddress"
-						placeholder="Email@example.com"
-						placeholderTextColor="white"
-						onChangeText={this.handleTextChange('email')}
-						value={this.state.email}
-						containerStyle={styles.input}
-					/>
-					<Input
-						source={passwordImg}
-						textContentType="name"
-						placeholder="Code"
-						placeholderTextColor="white"
-						onChangeText={this.handleTextChange('code')}
-						value={this.state.code}
-						containerStyle={styles.input}
-					/>
-					<View style={styles.div}>
-						<TouchableOpacity
-							activeOpacity={0.5}
-							style={[styles.button, disabled && {opacity: 0.5}]}
-							onPress={this.handleSignUp}
-							disabled={disabled}
-						>
-							{/* { (!fetching) ? ( */}
-								<Text style={styles.buttonText}> Register </Text>
-							{/* ) : ( */}
-								{/* <ProgressBarAndroid styleAttr="Small" color="white"/> */}
-							{/* )} */}
-						</TouchableOpacity>
-					</View>
-				</KeyboardAvoidingView>
-			// </ImageBackground>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+        <Input
+          source={usernameImg}
+          textContentType="username"
+          placeholder="Username"
+          placeholderTextColor="white"
+          onChangeText={this.handleTextChange('username')}
+          value={this.state.username}
+          containerStyle={styles.input}
+        />
+        <Input
+          source={usernameImg}
+          textContentType="name"
+          placeholder="Name"
+          placeholderTextColor="white"
+          onChangeText={this.handleTextChange('name')}
+          value={this.state.name}
+          containerStyle={styles.input}
+          autoCapitalize="words"
+        />
+        <Input
+          source={passwordImg}
+          textContentType="password"
+          placeholder="Password"
+          placeholderTextColor="white"
+          onChangeText={this.handleTextChange('password')}
+          value={this.state.password}
+          secureTextEntry={true}
+          containerStyle={styles.input}
+        />
+        <Input
+          source={verificationImg}
+          textContentType="password"
+          placeholder="Confirm Password"
+          placeholderTextColor="white"
+          onChangeText={this.handleTextChange('verification')}
+          value={this.state.verification}
+          secureTextEntry={true}
+          containerStyle={styles.input}
+        />
+        <Input
+          source={emailImg}
+          textContentType="emailAddress"
+          placeholder="Email@example.com"
+          placeholderTextColor="white"
+          onChangeText={this.handleTextChange('email')}
+          value={this.state.email}
+          containerStyle={styles.input}
+        />
+        <Input
+          source={passwordImg}
+          textContentType="name"
+          placeholder="Code"
+          placeholderTextColor="white"
+          onChangeText={this.handleTextChange('code')}
+          value={this.state.code}
+          containerStyle={styles.input}
+        />
+        <View style={styles.div}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={[styles.button, disabled && {opacity: 0.5}]}
+            onPress={() => this.props.signUp(this.state)}
+            disabled={disabled}
+          >
+            { (!this.props.fetching) ? (
+              <Text style={styles.buttonText}> Registrar! </Text>
+            ) : (
+              <ProgressBarAndroid styleAttr="Small" color="white"/>
+            )}
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
 		);
 	}
-}
-
-SignUp.propTypes = {
-	// fetching: PropTypes.bool,
-	// signUp: PropTypes.func,
-	// signUpRedirect: PropTypes.bool,
-	// error: PropTypes.bool,
-	// errorMessage: PropTypes.string,
 }
 
 export default SignUp;

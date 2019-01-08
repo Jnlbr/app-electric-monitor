@@ -1,4 +1,4 @@
-import Monitor from './monitor';
+import Monitor from './Monitor';
 import { connect } from 'react-redux';
 import { getAllMonths } from '../../store/actions/general/months';
 import { getAllRecord } from "../../store/actions/general/record";
@@ -12,6 +12,7 @@ const mapStateToProps = ({ general: { months, record }, auth: { logIn }}) => ({
   monthsError: months.error,
   monthsErrorMessage: months.errorMessage,
   months: months.data,
+  
   recordFetching: record.fetching,
   recordError: record.error,
   recordErrorMessage: record.errorMessage,

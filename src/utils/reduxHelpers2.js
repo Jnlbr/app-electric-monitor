@@ -44,7 +44,7 @@ function createFetchPattern({actionName, cb, actionHandlers = {}, initialState =
    */
   const action = ({ form = null, token = true } = {}) => {
     return async (dispatch, getState) => {
-      const error = (errorMessage) => dispatch({type: actionFailure, error: false, errorMessage });
+      const error = (errorMessage) => dispatch({type: actionFailure, error: errorMessage });
       dispatch({ type: actionRequest });
       const _token = getState().auth.logIn.token;
       try {
@@ -63,6 +63,11 @@ function createFetchPattern({actionName, cb, actionHandlers = {}, initialState =
           data: data
         }); 
       } catch(err) {
+        console.log(`
+          PACKAGE: utils/reduxHelpers2
+          METHOD: createFetchPattern
+          ERROR: ${err}
+        `);
         error(err.message || err);
       }
     }

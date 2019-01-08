@@ -14,6 +14,7 @@ import usernameImg from '../../assets/icons/user-input.png';
 import passwordImg from '../../assets/icons/password-input.png';
 
 class LogIn extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -22,12 +23,17 @@ class LogIn extends Component {
     }
     this.messageHandler = new MessageHandler();
   }
+
   handleTextChange = (input) => (value) => this.setState({[input]: value});
 
   componentDidUpdate(prevProps) {
     const user = this.props.user
     if (user && !prevProps.user) {
-      console.log('LOGIN DID UPDATE AND USER')
+      console.log(`
+        PACKAGE: screens/LogIn
+        CLASS: LogIn
+        DATA: ${JSON.stringify(user)}
+      `);
       this.props.setAuth(user);
       this.props.navigation.navigate('UserRoutes');
     }
@@ -70,7 +76,7 @@ class LogIn extends Component {
               disabled={disabled}
             >
               { (!fetching) ? ( 
-                  <Text style={styles.buttonText}> LOG IN! </Text>
+                  <Text style={styles.buttonText}> Iniciar sesion! </Text>
                ) : (
                   <ProgressBarAndroid styleAttr="Small" color="white"/>
               )}
@@ -85,7 +91,7 @@ class LogIn extends Component {
           >
             <Text
               style={styles.text}              
-            > SIGN UP!
+            > REGISTRAR!
             </Text>
           </TouchableOpacity>
         </View>

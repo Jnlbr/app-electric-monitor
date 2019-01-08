@@ -1,6 +1,5 @@
-export {default as Drawer} from './drawer';
-export {default as Input} from './input';
-export {default as ToggleSwitch} from './toggleSwitch';
-export {default as ConfigurationModal} from './configurationModal';
+export {default as Drawer} from './Drawer';
+export {default as Input} from './Input';
 export {default as MenuCard} from './MenuCard';
-export {default as Deck} from './Deck';
+export {default as ChartContainer} from './ChartContainer'
+export {default as Loading} from './Loading';

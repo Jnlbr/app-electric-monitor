@@ -4,12 +4,13 @@ import {
    View,
    ScrollView,
    TouchableOpacity,
-   Text
+   StyleSheet
 } from 'react-native';
+import { Text } from 'react-native-elements';
 import { DrawerItems, SafeAreaView } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import styles from './styles/drawer';
 import logOut from '../api/auth/logOut';
+import colors from '../contants/colors';
 import { connect } from 'react-redux';
 
 class Drawer extends Component {
@@ -25,7 +26,11 @@ class Drawer extends Component {
             style={{flex:1}}
             forceInset={{ top: 'always', horizontal: 'never' }}
           >
-            <Text> JEAN LAMBERT </Text>
+            <View style={{ alignItems: 'center'}}>
+              <Text h4 style={{ color: 'white'}}>
+                
+              </Text>
+            </View>
           </SafeAreaView>               
         </ScrollView>
         <View style={styles.footerContainer}>
@@ -47,10 +52,27 @@ class Drawer extends Component {
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-between',
+    backgroundColor: colors.primary.light
+  },
+  footerContainer: {
+    padding: 20,
+  },
+  button: {
+    width: 30,
+  },
+});
+
+const mapStateToProps = ({ auth: { logIn }}) => ({
+  user: logIn.data,
+})
 const mapDispatchToProps = dispatch => ({
   logOut: () => {
     dispatch({type:'LOG_OUT'})
   }
 })
 
-export default connect(null,mapDispatchToProps)(Drawer);
+export default connect(mapStateToProps,mapDispatchToProps)(Drawer);

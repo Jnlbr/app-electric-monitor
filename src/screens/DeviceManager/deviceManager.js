@@ -1,24 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { 
   View,
-  ActivityIndicator,
-  Button
+  Text,
+  ActivityIndicator
 } from 'react-native';
-import { 
-  List, 
-  ListItem
-} from 'react-native-elements';
+import { ListItem, Button } from 'react-native-elements';
 import MessageHandler from '../../utils/messageHandler';
-import { ToggleSwitch } from '../../components';
 import updateStatus from "../../api/device/updateStatus";
 import styles from "./styles/deviceManager";
 import colors from '../../contants/colors';
 import RightIcon from './RightIcon';
+import { Loading } from '../../components';
 
 class DeviceManager extends Component {
   
   static navigationOptions = {
-    title: 'Device Manager',
+    title: 'Dispositivos',
     headerStyle: {
       backgroundColor: colors.primary.main,
     },
@@ -49,6 +46,7 @@ class DeviceManager extends Component {
   }
 
   handleStatusChange = async (id,status) => {
+    console.log(id, status)
     try {
       await updateStatus({id,status:!status}, this.props.token);
       this.props.stateChange(id);
@@ -60,38 +58,57 @@ class DeviceManager extends Component {
 
 
   render() {
-    console.log(this.props.devices)
     return (
       <View style={styles.root}>
         {(this.props.fetching) ? (
-          <ActivityIndicator 
-            size="large" 
-            color={colors.secondary.main}
-          /> ) 
+          <Loading /> ) 
           : (
-          <List containerStyle={{margin: 20}}>
-            {this.props.devices.map(device => (
-              <ListItem
-                onPress={() => {this.props.navigation.push('Device', {device})}}
-                rightIcon={
-                  <RightIcon
-                    device={device}                 
-                    onStatusChange={(isOn) => {
-                      this.handleStatusChange(device.id, device.status);
-                    }}
-                    onOption={() =>
-                      this.handleOption(device)
-                    }
-                  />
-                }
-                roundAvatar
-                key={device.id}
-                title={device.name}
-              />
-            ))}
-          </List>
+          <View style={styles.list}>
+            {(this.props.devices.length > 0) ? (
+              <Fragment>
+              {this.props.devices.map(device => (
+                <ListItem
+                  rightElement={
+                    <RightIcon
+                      device={device}
+                      onOption={() =>
+                        this.handleOption(device)
+                      }
+                    />
+                  }
+                  onPress={() => { this.props.navigation.push('Device', { device }) }}
+                  switch={{
+                    trackColor: {true:'blue', false:'red'},
+                    disabled: !device.active,
+                    value: device.status, 
+                    onValueChange: () => this.handleStatusChange(device.id, device.status)
+                  }}
+                  roundAvatar
+                  key={device.id}
+                  title={device.name}
+                />
+              ))}
+              </Fragment>
+            ) : (
+              <Text> No hay dispositivos disponibles </Text>
+            )}
+              <View style={{ alignItems: 'center' }}>
+                <Button
+                  onPress={() => this.props.navigation.navigate('AddDevice')}
+                  title="Agregar dispositivo"
+                  buttonStyle={{
+                    backgroundColor: '#1194f6',
+                    width: 300,
+                    height: 45,
+                    borderColor: "transparent",
+                    borderWidth: 0,
+                    borderRadius: 5
+                  }}
+                  containerStyle={{ margin: 20 }}
+                />
+              </View>
+          </View>
         )}
-        <Button onPress={() => this.props.navigation.navigate('AddDevice')} title="Add new device" />
       </View>
     )
   }

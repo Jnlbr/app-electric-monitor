@@ -6,7 +6,6 @@ import fetchApi from '../../utils/fetchApi';
  */
 export default async (form,token) => {
   console.log(form)
-  console.log(token)
   const options = {
     method: 'put',
     credentials: 'include',

@@ -7,7 +7,7 @@ import {
 import {
   Card
 } from 'react-native-elements';
-import styles from './styles/home';
+import styles from './styles';
 import { connect } from 'react-redux';
 // import styled from 'styled-components/native';
 import { Deck, MenuCard } from '../../components';
@@ -39,9 +39,10 @@ class Home extends Component {
         />
         <MenuCard
           onPress={this.navigate('DeviceManager')}
-          title="Devices"
+          title="Dispositivos"
           image={require("../../assets/menu/devices.png")}
         />
+        <View style={{height: 25}}></View>
       </ScrollView>
     )
   }

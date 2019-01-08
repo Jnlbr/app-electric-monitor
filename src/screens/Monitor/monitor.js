@@ -1,20 +1,20 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { 
   View,
-  Text,
   Picker,
-  ActivityIndicator
+  Button,
+  TouchableOpacity
 } from 'react-native';
 import {
-  Divider,
+  Text,
   Badge,
-  Button,
 } from 'react-native-elements';
 import colors from '../../contants/colors';
 import monthLabel from "../../utils/monthLabel";
 import PureChart from 'react-native-pure-chart';
 import MessageHandler from '../../utils/messageHandler';
-import styles from './styles/monitor';
+import styles from './styles';
+import { ChartContainer, Loading } from '../../components';
 
 class Monitor extends Component {
 
@@ -34,8 +34,12 @@ class Monitor extends Component {
 
     this.state = {
       actual: null,
+      selected: 0,
+
+      record: null,
       current: [],
-      power: []
+      power: [],
+      isEmpty: false
     }
     this.messageHandler = new MessageHandler();
   }
@@ -47,14 +51,21 @@ class Monitor extends Component {
   componentDidUpdate(prevProps) {    
     if(prevProps.monthsFetching && !this.props.monthsFetching) {
       const months = this.props.months;
-      this.getRecord(months[months.length-1])
-      console.log('GET RECORD')
+      if(months.length > 0) {
+        this.getRecord(months[months.length - 1])
+        this.setState({ isEmpty: false });
+      } else {
+        this.setState({ isEmpty: true });
+      }
     }
-    if(!prevProps.record && this.props.record) {
-      console.log(this.props.record)
+    if(prevProps.recordFetching && !this.props.recordFetching) {
+      let record = this.props.record[this.state.selected];
+      const total = this.props.record[0].total;
+
       this.setState({
-        current: this.props.record.current,
-        power: this.props.record.power
+        record,
+        current: total.current,
+        power: total.power
       })
     }
     if(!prevProps.monthsError && this.props.monthsError) {
@@ -75,70 +86,105 @@ class Monitor extends Component {
     })
   }
 
-  render() {
-    const {months} = this.props;
+  handleBadgePress = (record, selected) => this.setState({record,selected})
 
+  render() {
+    const { months } = this.props;
+    console.log(this.state.current)
     return (
       <View style={styles.root}>
-        <Picker
-          selectedValue={this.state.actual}
-          style={{ height: 50, width: 200, marginTop: 20 }}
-          onValueChange={(item) => this.getRecord(item)}
-        >
-          {months.map((m,i) => 
-            <Picker.Item
-              key={i}
-              label={monthLabel(m.month) + " " + m.year}
-              value={m}
-            />
-          )}
-        </Picker>
-        <View style={styles.chartContainer}>          
-          {(!this.props.recordFetching) ? (
-            <View>
-              <View style={styles.chart}>
-                <Text> Corriente </Text>
-                <PureChart
-                  data={this.state.current}
-                  type='line'
-                />
-                <View style={styles.badgesContainer}>
-                  {this.state.current.map(c => (
-                    <Badge
-                      key={c.id}
-                      containerStyle={{backgroundColor:c.color}}
-                      value={c.seriesName}
-                    />
-                  ))}
+        {(this.state.isEmpty) ? (
+          <View style={{marginTop: 20, alignItems: 'center', flex: 1, justifyContent: 'center'}}>
+            <Text h4>
+              No hay datos disponibles
+            </Text>
+            <Button title="Ir atras" onPress={() => this.props.navigation.goBack()} />
+          </View>
+        ) : (
+          <Fragment>
+            {(this.props.monthsFetching || this.props.recordFetching) ? (
+          <Loading />
+        ) : (
+          <Fragment>
+            <Picker
+              mode="dropdown"
+              selectedValue={this.state.actual}
+              style={styles.picker}
+              onValueChange={(item) => this.getRecord(item)}
+            >
+              {months.map((m, i) =>
+              <Picker.Item
+                key={i}
+                label={monthLabel(m.month) + " " + m.year}
+                value={m}
+              />
+            )}
+            </Picker>
+            {(this.state.record != null) && (
+              <Fragment>
+                <View style={styles.devices}>
+                  <Badges data={this.state.record.data} />
                 </View>
-              </View>
-              <View style={styles.chart}>
-                <Text> Potencia </Text>
-                <PureChart
-                  data={this.state.power}
-                  type='line'
-                />
-                <View style={styles.badgesContainer}>
-                  {this.state.power.map(c => (
-                    <Badge
-                      key={c.id}
-                      containerStyle={{backgroundColor:c.color}}
-                      value={c.seriesName}
+                <View style={styles.chartContainer}>
+                  <View style={styles.badgesContainer}>
+                    {this.props.record.map((r, i) => (
+                      <Badge
+                        onPress={() => this.handleBadgePress(r, i)}
+                        component={TouchableOpacity}
+                        key={i}
+                        containerStyle={{
+                          backgroundColor: colors.secondary.main,
+                          marginBottom: 2.5
+                        }}
+                        value={r.seriesName}
+                      />
+                    ))}
+                  </View>
+                  <View style={styles.chart}>
+                    <ChartContainer
+                      title={this.state.record.seriesName}
+                      data={this.state.record.data}
                     />
-                  ))}                  
+                  </View>
                 </View>
-              </View>
-            </View>
-          ) : (
-            <ActivityIndicator 
-              size="large" 
-              color="red"
-            />
-          )}
-        </View>
+                <View style={{alignItems: 'center', marginTop: 20}}>
+                  <Text h4 style={{ marginBottom: 5}}> Consumo total </Text>
+                  {(this.state.selected === 0) ? (
+                    <PureChart
+                      type="pie"
+                      data={this.state.current}
+                    />
+                  ):(
+                    <PureChart
+                      type="pie"
+                      data={this.state.power}
+                    />
+                  )}
+                </View>
+              </Fragment>
+            )}
+          </Fragment>
+        )}
+          </Fragment>
+        )}
       </View>
     )
   }
 }
+
+const Badges = ({data}) => (
+  <Fragment>
+    {data.map(d => (
+      <Badge
+        key={d.id}
+        containerStyle={{ 
+          backgroundColor:d.color,
+          marginRight: 2.5,
+        }}
+        value={d.seriesName}
+      />
+    ))}
+  </Fragment>
+)
 
 export default Monitor;

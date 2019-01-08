@@ -2,17 +2,24 @@ import React, { Component } from 'react';
 import { 
   View,
   Text,
-  CheckBox
 } from 'react-native';
-import { FormLabel, FormInput, Button } from 'react-native-elements'
-import styles from './styles/configuration';
+import { Input, Button, CheckBox } from 'react-native-elements'
+import styles from './styles';
 import colors from '../../contants/colors';
+import MessageHandler from '../../utils/messageHandler';
 
 class Configuration extends Component {
-  state = {
-    device: {},
-    name: '',
-    voltage: 1,
+  
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      device: {},
+      name: '',
+      voltage: 1,
+      notifiable: false,
+    }
+    this.messageHandler = new MessageHandler();
   }
   
   static navigationOptions = {
@@ -29,7 +36,7 @@ class Configuration extends Component {
   componentDidMount() {
     const device = this.props.navigation.getParam('device', { name: 'Device' });
     console.log(device);
-    this.setState({ device, name: device.name, voltage: device.voltage });
+    this.setState({ device, name: device.name, voltage: device.voltage, notifiable: device.notifiable});
   }
 
   componentDidUpdate(prevProps) {
@@ -43,36 +50,66 @@ class Configuration extends Component {
     }
   }
 
+  updateDevice = () => {
+    const { name, voltage, notifiable, device } = this.state;
+
+    if(voltage != device.voltage) {
+      if (isNaN(voltage)) {
+        this.messageHandler.centerMessage('El voltaje debe ser numerico');
+      } else {
+        this.props.updateData({ form: { id: device.id, name, voltage, notifiable } });
+      }
+    }
+  }
+
   render() {
     return (
         <View style={styles.container}>
-          <View style={{paddingHorizontal: 15, flex: 1}}>
-            <FormLabel> Name </FormLabel>
-            <FormInput onChangeText={name => this.setState({ name })} />
-            <FormLabel> Voltage </FormLabel>
-            <FormInput textContentType="telephoneNumber" onChangeText={voltage => this.setState({ voltage })} />
-              {/* <CheckBox
-                center
-                title='ON OFF NOTIFICATION'
-                checked={true}
-              /> */}
-          </View>
+          <View style={styles.form}>
+            <Input
+              placeholder='Name'
+              onChangeText={name => this.setState({ name })}
+              containerStyle={{
+                marginBottom: 10,
+              }}
+            />
+            <Input
+              placeholder='Voltage'
+              onChangeText={voltage => this.setState({ voltage })}
+              errorMessage="El valor tiene que ser numerico"
+            />
+            <CheckBox
+              title='Habilitar notificaciones de usuario'
+              checked={this.state.notifiable}
+              onPress={() => {
+                console.log('ad');
+                this.setState({ notifiable: !this.state.notifiable })
+              }}
+            />
+          </View>          
           <Button
-            title="Make changes"
+            title="Actualizar"
             loading={this.props.updateFetching}
-            // FETCH TO EMIT THE CHANGES
-            onPress={() => this.props.updateData({ form: { id: this.state.device.id, name: this.state.name, voltage: this.state.voltage }})}
-            backgroundColor='blue'
-            containerViewStyle={{paddingVertical: 5}}
-            borderRadius={5}
+            onPress={this.updateDevice}
+            buttonStyle={{
+              backgroundColor:'#1194f6',
+              width: 300,
+              height: 45,
+              borderRadius: 5
+            }}
           />
           <Button
-            title="DELETE"
+            title="Eliminar"
             loading={this.props.deleteFetching}
             onPress={() => this.props.deleteDevice({ form: { id: this.state.device.id }})}
-            backgroundColor='red'
-            containerViewStyle={{paddingVertical: 5}}
-            borderRadius={5}
+            buttonStyle={{
+              backgroundColor: colors.secondary.main,
+              width: 300,
+              height: 45,
+              marginTop: 10,
+              marginBottom: 20,
+              borderRadius: 5
+            }}
           />
     </View>
     )
