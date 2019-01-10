@@ -1,10 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { 
   View,
-  Text,
   ActivityIndicator
 } from 'react-native';
-import { ListItem, Button } from 'react-native-elements';
+import { ListItem, Button, Text } from 'react-native-elements';
 import MessageHandler from '../../utils/messageHandler';
 import updateStatus from "../../api/device/updateStatus";
 import styles from "./styles/deviceManager";
@@ -61,8 +60,13 @@ class DeviceManager extends Component {
     return (
       <View style={styles.root}>
         {(this.props.fetching) ? (
-          <Loading /> ) 
-          : (
+          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <ActivityIndicator 
+              size="large"
+              color={colors.secondary.main}
+            />
+          </View>
+        ) : (
           <View style={styles.list}>
             {(this.props.devices.length > 0) ? (
               <Fragment>
@@ -86,11 +90,14 @@ class DeviceManager extends Component {
                   roundAvatar
                   key={device.id}
                   title={device.name}
+                  subtitle={`ID: ${device.id} && V = ${device.voltage}`}
                 />
               ))}
               </Fragment>
             ) : (
-              <Text> No hay dispositivos disponibles </Text>
+              <View style={{ alignItems: 'center', marginTop: 20, marginHorizontal: 5 }}>
+                <Text h4> No hay dispositivos disponibles </Text>
+              </View> 
             )}
               <View style={{ alignItems: 'center' }}>
                 <Button

@@ -21,8 +21,13 @@ async function registerForPushNotificationsAsync(token) {
   if (existingStatus !== 'granted') {
     // Android remote notification permissions are granted during the app
     // install, so this will only ask on iOS
-    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-    finalStatus = status;
+    try {
+      status = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    } catch(err) {
+      console.log('ERROR GETTING THE TOKEN');
+      console.log(err);
+    }    
   }
 
   // Stop here if the user did not grant permissions

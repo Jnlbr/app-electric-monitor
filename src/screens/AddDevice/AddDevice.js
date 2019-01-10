@@ -39,6 +39,9 @@ class AddDevice extends Component {
       console.log(this.props.data);
       this.props.navigation.navigate('DeviceManager');
     }
+    if(!prevProps.error && this.props.error) {
+      this.messageHandler.centerMessage(this.props.errorMessage);
+    }
   }
 
   registerDevice = () => {

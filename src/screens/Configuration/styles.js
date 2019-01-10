@@ -7,11 +7,15 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   form: {
+    zIndex: 1,
     flex: 1,
     width: DEVICE_WIDTH,
     marginLeft: 15,
     marginRight: 15,
     alignItems: 'center',
     paddingTop: 15,
+  },
+  buttons: { 
+    zIndex: 100 
   }
 })

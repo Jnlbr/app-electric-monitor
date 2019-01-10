@@ -82,6 +82,7 @@ class Device extends Component {
     if (prevProps.monthsFetching && !this.props.monthsFetching) {
       const months = this.props.months;
       if(months.length > 0) {
+        console.log('DEVICE MONTH LENGTH = ' + months.length);
         this.getRecord(months[months.length - 1]);
       } else {
         this.setState({
@@ -92,6 +93,7 @@ class Device extends Component {
     if(prevProps.recordFetching && !this.props.recordFetching) {
       const record = this.props.record;
       if(record.length > 0) {
+        console.log('DEVICE RECORD LENGTH = ' + record.length);
         this.setState({
           record: record[this.state.selected]
         })
@@ -125,6 +127,11 @@ class Device extends Component {
   render() {
     let { months } = this.props;
     let { isEmpty, active, current, power } = this.state;
+    let showRecord = !this.props.recordFetching && this.state.record != null
+    
+    console.log('============================');
+    console.log(showRecord)
+    console.log('============================');
 
     return (
       <ScrollView style={styles.root}>
@@ -135,13 +142,13 @@ class Device extends Component {
               {(current.length > 0) ? (
                 <View style={{ marginTop: 15, marginHorizontal: 5 }}>
                   <ChartContainer
-                    title="Lectura de corriente"
+                    title="Lectura de corriente (A)"
                     data={current}
                     type="line"
                   />
                   <View style={{ marginVertical: 10 }} />
                   <ChartContainer
-                    title="Lectura de potencia"
+                    title="Lectura de potencia (W)"
                     data={power}
                     type="line"
                   />
@@ -149,6 +156,7 @@ class Device extends Component {
               ) : (
                   <View style={styles.waiting}>
                     <Text> Esperando por datos... </Text>
+                    <View style={{height: 5}}/>
                     <ActivityIndicator color="red" />
                   </View>
                 )}
@@ -159,21 +167,19 @@ class Device extends Component {
               </View>
             )}
         </View>
-
         <Divider style={styles.divider} />
-
         <View style={styles.record}>
           <Text h3> Historial de consumo </Text>
           {(isEmpty) ? (            
             <Text> No hay informacion disponible </Text>
           ) : (
             <Fragment>
-              {(!this.props.recordFetching && this.state.record != null) ? (
+              {(showRecord) ? (
                 <Fragment>
                   <Picker
                     mode="dropdown"
                     selectedValue={this.state.actual}
-                    style={{ height: 50, width: 200 }}
+                    style={styles.picker}
                     onValueChange={(item) => this.getRecord(item)}
                   >
                     {months.map((m, i) =>
@@ -184,7 +190,14 @@ class Device extends Component {
                       />
                     )}
                   </Picker>
-                  <View style={styles.recordData}>
+                  <View style={styles.recordData}>                    
+                    <View style={styles.recordChart}>
+                      <ChartContainer
+                        title={this.state.record.seriesName}
+                        data={this.state.record.data}
+                        type="line"
+                      />
+                    </View>
                     <View style={styles.badges}>
                       {this.props.record.map((r,i) => (
                         <Badge
@@ -193,25 +206,19 @@ class Device extends Component {
                           onPress={() => this.handleBadgePress(r,i)}
                           containerStyle={{
                             backgroundColor: r.color,
-                            marginBottom: 2.5
+                            marginBottom: 2.5,
                           }}
                           value={r.seriesName}
-                        />  
+                        />
                       ))}
                     </View>
-                    <View style={styles.recordChart}>
-                      <ChartContainer
-                        title={this.state.record.seriesName}
-                        data={this.state.record.data}
-                        type="line"
-                      />
-                    </View>
-                  </View>                  
+                  </View>
                   </Fragment>
               ) : (
                 <ActivityIndicator 
                   size="large" 
                   color="red"
+                  style={{marginVertical: 10}}
                 />
               )}
             </Fragment>

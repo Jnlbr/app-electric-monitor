@@ -11,7 +11,6 @@ const ChartContainer = ({ data, title }) => (
     <View style={styles.chart}>
       <PureChart
         data={data}
-        width="100%"
         height={100}
         type='line'
       />
@@ -21,8 +20,8 @@ const ChartContainer = ({ data, title }) => (
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
-    borderColor: 'blue',
+    // borderWidth: 1,
+    // borderColor: 'blue',
   },
   title: {
     marginBottom: 10,

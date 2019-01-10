@@ -47,7 +47,7 @@ class LogIn extends Component {
     const { fetching } = this.props;
 
     return (
-      <KeyboardAvoidingView style={styles.root} behavior="padding" enabled>
+      <View style={styles.root}>
         <View style={styles.loginContainer}>
           <Input
             source={usernameImg}
@@ -95,7 +95,7 @@ class LogIn extends Component {
             </Text>
           </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
+      </View>
     );
   }
 }

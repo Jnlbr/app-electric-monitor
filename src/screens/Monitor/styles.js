@@ -22,21 +22,25 @@ export default StyleSheet.create({
     marginRight: 5,
   },
   chartContainer: {
-    flexDirection: 'row',
-    marginHorizontal: 5,
     marginTop: 15,
+    width: DEVICE_WIDTH
   },
   badgesContainer: {
-    marginRight: 5,
-
+    marginHorizontal: 15,
+    marginTop: 5,
+    flexDirection: 'row'
   },
   devices: {
     flexDirection: 'row',
-    marginTop: 5,
-    marginHorizontal: 5,
-    justifyContent:'center',
+    marginTop: 10,
+    marginHorizontal: 15,
   },
   chart: {
-    marginBottom: 25,
+    marginBottom: 5,
+  },
+  totalChart: { 
+    alignItems:'center',
+    marginTop:10, 
+    marginBottom: 20 
   }
 });

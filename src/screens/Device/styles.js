@@ -7,40 +7,46 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: 'white'
   },
-
+  picker: {
+    height: 50,
+    width: DEVICE_WIDTH,
+    marginTop: 10
+  },
   realTime: {
+    flex:1,
     marginHorizontal: 5,
     marginTop: 15,
     marginBottom: 15,
     alignItems: 'center'
   },
   waiting: {
-    flex: 1,
-    flexDirection: 'row',
     marginVertical: 5,
     marginLeft: 5,
   },
-
   divider: { 
     backgroundColor: 'red',
     height: 2
   },
-
   record: {
+    // borderWidth: 2,
+    // borderColor: 'blue',
     flex: 1,
     alignItems: 'center',
     marginTop: 15,
     marginHorizontal: 5,
   },
-  recordData: { 
-    flexDirection: 'row', 
-    marginTop: 5 
+  recordData: {
+    marginTop: 5,
+    marginLeft: 5,
+    marginBottom: 20
   },
   recordChart: {
-    borderWidth: 2,
-    borderColor: 'green'
+    // borderWidth: 2,
+    // borderColor: 'green',
   },
   badges: {
-    marginRight: 5,
+    flexDirection: 'row',
+    marginTop: 5,
+    marginHorizontal: 15
   }
 });

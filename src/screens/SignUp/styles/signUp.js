@@ -3,6 +3,11 @@ import { DEVICE_WIDTH } from "../../../contants/dimensions";
 import colors from '../../../contants/colors';
 
 export default StyleSheet.create({
+  root: {
+    paddingTop: 20,
+    paddingBottom: 20,
+    flex: 1,
+  },
     container: {
         flex: 1,
         alignItems: 'center',

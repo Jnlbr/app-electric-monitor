@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { 
   View,
   Text,
+  KeyboardAvoidingView
 } from 'react-native';
 import { Input, Button, CheckBox } from 'react-native-elements'
 import styles from './styles';
 import colors from '../../contants/colors';
 import MessageHandler from '../../utils/messageHandler';
+import emptyFields from '../../utils/emptyFields';
 
 class Configuration extends Component {
   
@@ -48,6 +50,12 @@ class Configuration extends Component {
       this.props.updateDevice(this.props.data);
       this.props.navigation.goBack();
     }
+    if(!prevProps.updateError && this.props.updateError) {
+      this.messageHandler.centerMessage(this.props.updateErrorMessage);
+    }
+    if(!prevProps.deleteError && this.props.deleteError) {
+      this.messageHandler.centerMessage(this.props.deleteErrorMessage);
+    }
   }
 
   updateDevice = () => {
@@ -59,10 +67,13 @@ class Configuration extends Component {
       } else {
         this.props.updateData({ form: { id: device.id, name, voltage, notifiable } });
       }
+    } else {
+      this.props.updateData({ form: { id: device.id, name, voltage, notifiable } });
     }
   }
 
   render() {
+    const disabled = emptyFields({ name: this.state.name });
     return (
         <View style={styles.container}>
           <View style={styles.form}>
@@ -86,20 +97,23 @@ class Configuration extends Component {
                 this.setState({ notifiable: !this.state.notifiable })
               }}
             />
-          </View>          
-          <Button
+          </View>
+          <View style={styles.buttons}>
+            <Button
             title="Actualizar"
+            disabled={disabled}
             loading={this.props.updateFetching}
             onPress={this.updateDevice}
             buttonStyle={{
               backgroundColor:'#1194f6',
               width: 300,
+              zIndex: 100,
               height: 45,
               borderRadius: 5
             }}
           />
           <Button
-            title="Eliminar"
+            title="Eliminar"            
             loading={this.props.deleteFetching}
             onPress={() => this.props.deleteDevice({ form: { id: this.state.device.id }})}
             buttonStyle={{
@@ -111,6 +125,7 @@ class Configuration extends Component {
               borderRadius: 5
             }}
           />
+          </View>
     </View>
     )
   }

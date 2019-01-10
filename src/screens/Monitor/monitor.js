@@ -3,7 +3,9 @@ import {
   View,
   Picker,
   Button,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator
 } from 'react-native';
 import {
   Text,
@@ -92,10 +94,10 @@ class Monitor extends Component {
     const { months } = this.props;
     console.log(this.state.current)
     return (
-      <View style={styles.root}>
+      <ScrollView style={styles.root}>
         {(this.state.isEmpty) ? (
           <View style={{marginTop: 20, alignItems: 'center', flex: 1, justifyContent: 'center'}}>
-            <Text h4>
+            <Text h4 style={{ marginBottom: 10 }}>
               No hay datos disponibles
             </Text>
             <Button title="Ir atras" onPress={() => this.props.navigation.goBack()} />
@@ -103,7 +105,12 @@ class Monitor extends Component {
         ) : (
           <Fragment>
             {(this.props.monthsFetching || this.props.recordFetching) ? (
-          <Loading />
+          <View style={{flex: 1, marginTop: 250, alignItems: 'center', justifyContent: 'center'}}>
+            <ActivityIndicator 
+              size="large"
+              color={colors.secondary.main}
+            />
+          </View>
         ) : (
           <Fragment>
             <Picker
@@ -125,7 +132,6 @@ class Monitor extends Component {
                 <View style={styles.devices}>
                   <Badges data={this.state.record.data} />
                 </View>
-                <View style={styles.chartContainer}>
                   <View style={styles.badgesContainer}>
                     {this.props.record.map((r, i) => (
                       <Badge
@@ -140,6 +146,7 @@ class Monitor extends Component {
                       />
                     ))}
                   </View>
+                <View style={styles.chartContainer}>
                   <View style={styles.chart}>
                     <ChartContainer
                       title={this.state.record.seriesName}
@@ -147,8 +154,8 @@ class Monitor extends Component {
                     />
                   </View>
                 </View>
-                <View style={{alignItems: 'center', marginTop: 20}}>
-                  <Text h4 style={{ marginBottom: 5}}> Consumo total </Text>
+                <View style={styles.totalChart}>
+                  <Text h4 style={{ marginBottom: 10}}> Consumo total </Text>
                   {(this.state.selected === 0) ? (
                     <PureChart
                       type="pie"
@@ -167,7 +174,7 @@ class Monitor extends Component {
         )}
           </Fragment>
         )}
-      </View>
+      </ScrollView>
     )
   }
 }
